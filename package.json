@@ -1,0 +1,28 @@
+{
+  "name": "taskquest",
+  "version": "1.0.0",
+  "description": "A to-do application than not only allows you to manage various to-do lists as projects, but also helps you gamify your life.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/black-RAM/TaskQuest.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/black-RAM/TaskQuest/issues"
+  },
+  "homepage": "https://github.com/black-RAM/TaskQuest#readme",
+  "devDependencies": {
+    "css-loader": "^6.8.1",
+    "sass": "^1.68.0",
+    "sass-loader": "^13.3.2",
+    "style-loader": "^3.3.3",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4"
+  }
+}
