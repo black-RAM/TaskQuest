@@ -27,6 +27,11 @@ class Project {
       item => item.title !== title
     );
   }
+
+  delete() {
+    let index = projects.indexOf(this);
+    projects.splice(index, 1);
+  }
 }
 
 const projects: Project[] = [];
