@@ -1,35 +1,31 @@
-// Define types for your data
-type Priority = 1 | 2 | 3;
-type Difficulty = 1 | 2 | 3;
+type Scale = 1 | 2 | 3;
 
 class ToDo {
-  title: string;
-  description: string;
-  priority: Priority;
-  difficulty: Difficulty;
-  due: Date;
-
-  constructor(title: string, description: string, dueDate: Date, difficulty: Difficulty, priority: Priority) {
-    this.title = title;
-    this.description = description;
-    this.priority = priority;
-    this.difficulty = difficulty;
-    this.due = dueDate;
-  }
+  constructor(
+    public title: string,
+    public description: string,
+    public due: Date,
+    public difficulty: Scale,
+    public priority: Scale
+  ) { }
 }
 
 class Project {
-  name: string;
-  todos: ToDo[];
-
-  constructor(projectName: string, initialToDos?: ToDo[]) {
-    this.name = projectName;
-    this.todos = initialToDos || [];
+  constructor(
+    public name: string,
+    public todos: ToDo[] = []
+  ) {
     projects.push(this);
   }
 
   addToDo(todo: ToDo) {
     this.todos.push(todo);
+  }
+
+  finishToDo(title: string) {
+    this.todos = this.todos.filter(
+      item => item.title !== title
+    );
   }
 }
 
