@@ -5,7 +5,6 @@ class ToDo {
     public title: string,
     public description: string,
     public due: Date,
-    public difficulty: Scale,
     public priority: Scale
   ) { }
 }
