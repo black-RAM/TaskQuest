@@ -116,7 +116,7 @@ eval("\n\n/* istanbul ignore next  */\nfunction styleTagTransform(css, styleElem
   \**********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./style.scss */ \"./src/style.scss\");\n\n\nclass ToDo {\n  constructor(title, description, dueDate, priority) {\n    this.title = title;\n    this.description = description;\n    this.priority = priority;\n    this.due = dueDate;\n  }\n}\n\nconst math = new ToDo(\"Math homework\", \"Exercise 11.1, Exercise 11.2, Exercise 11.3\", \"Thursday\", \"high\");\n\nconsole.log(math)\n\n//# sourceURL=webpack://taskquest/./src/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./style.scss */ \"./src/style.scss\");\n\n\nconst projects = []\n\nclass Project {\n  constructor(projectName) {\n    this.name = projectName;\n    this.todos = [];\n    projects.push(this)\n  }\n\n  addToDo(todo) {\n    this.todos.push(todo);\n  }\n}\n\nclass ToDo {\n  constructor(title, description, dueDate, difficulty, priority) {\n    this.title = title;\n    this.description = description;\n    this.priority = priority;\n    this.difficulty = difficulty;\n    this.due = dueDate;\n  }\n}\n\nconst math = new ToDo(\"Math homework\", \"Exercise 11.1, Exercise 11.2, Exercise 11.3\", \"Thursday\", \"hard\", \"high\");\n\nconsole.log(math)\n\nconst homeworkProject = new Project(\"homework\");\nhomeworkProject.addToDo(math);\nconsole.log(homeworkProject)\n\nconsole.log(projects)\n\n//# sourceURL=webpack://taskquest/./src/index.js?");
 
 /***/ })
 
