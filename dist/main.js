@@ -110,23 +110,23 @@ eval("\n\n/* istanbul ignore next  */\nfunction styleTagTransform(css, styleElem
 
 /***/ }),
 
-/***/ "./src/app.js":
+/***/ "./src/app.ts":
 /*!********************!*\
-  !*** ./src/app.js ***!
+  !*** ./src/app.ts ***!
   \********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   Project: () => (/* binding */ Project),\n/* harmony export */   ToDo: () => (/* binding */ ToDo),\n/* harmony export */   projects: () => (/* binding */ projects)\n/* harmony export */ });\n// application logic\nconst projects = []\n\nclass Project {\n  constructor(projectName, initialToDos) {\n    this.name = projectName;\n    this.todos = initialToDos || []; // To-dos are organized as projects\n    projects.push(this); // add this Project to list of projects\n  }\n\n  addToDo(todo) {\n    this.todos.push(todo);\n  }\n}\n\nclass ToDo {\n  constructor(title, description, dueDate, difficulty, priority) {\n    this.title = title;\n    this.description = description;\n    this.priority = priority;\n    this.difficulty = difficulty;\n    this.due = dueDate;\n  }\n}\n\n\n\n//# sourceURL=webpack://taskquest/./src/app.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   Project: () => (/* binding */ Project),\n/* harmony export */   ToDo: () => (/* binding */ ToDo),\n/* harmony export */   projects: () => (/* binding */ projects)\n/* harmony export */ });\nclass ToDo {\n    constructor(title, description, dueDate, difficulty, priority) {\n        this.title = title;\n        this.description = description;\n        this.priority = priority;\n        this.difficulty = difficulty;\n        this.due = dueDate;\n    }\n}\nclass Project {\n    constructor(projectName, initialToDos) {\n        this.name = projectName;\n        this.todos = initialToDos || [];\n        projects.push(this);\n    }\n    addToDo(todo) {\n        this.todos.push(todo);\n    }\n}\nconst projects = [];\n\n\n\n//# sourceURL=webpack://taskquest/./src/app.ts?");
 
 /***/ }),
 
-/***/ "./src/index.js":
+/***/ "./src/index.ts":
 /*!**********************!*\
-  !*** ./src/index.js ***!
+  !*** ./src/index.ts ***!
   \**********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./style.scss */ \"./src/style.scss\");\n/* harmony import */ var _app__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./app */ \"./src/app.js\");\n\n\n\nconst defaultProject = new _app__WEBPACK_IMPORTED_MODULE_1__.Project(\"Default Project\");\n\nconsole.log(defaultProject)\n\n//# sourceURL=webpack://taskquest/./src/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./style.scss */ \"./src/style.scss\");\n/* harmony import */ var _app__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./app */ \"./src/app.ts\");\n\n\nconst defaultProject = new _app__WEBPACK_IMPORTED_MODULE_1__.Project(\"Default Project\", [\n    new _app__WEBPACK_IMPORTED_MODULE_1__.ToDo(\"Math homework\", \"Do math exercises\", new Date('2023-09-30T12:00:00'), 3, 3),\n    new _app__WEBPACK_IMPORTED_MODULE_1__.ToDo(\"Chores\", \"Wash the Dishes\", new Date('2023-09-30T12:00:00'), 3, 3)\n]);\nconsole.log(defaultProject);\n\n\n//# sourceURL=webpack://taskquest/./src/index.ts?");
 
 /***/ })
 
@@ -207,7 +207,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _sty
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module can't be inlined because the eval devtool is used.
-/******/ 	var __webpack_exports__ = __webpack_require__("./src/index.js");
+/******/ 	var __webpack_exports__ = __webpack_require__("./src/index.ts");
 /******/ 	
 /******/ })()
 ;
