@@ -1,12 +1,9 @@
 import "./style.scss";
 import { projects, Project, ToDo } from "./app";
 
-const math = new ToDo("Math homework", "Exercise 11.1, Exercise 11.2, Exercise 11.3", "Thursday", "hard", "high");
+const defaultProject = new Project("Default Project", [
+  new ToDo("Math homework", "Do math exercises", "Thursday", "medium", "high"),
+  new ToDo("Chores", "Wash the Dishes", "tonight", "easy", "low")
+]);
 
-console.log(math)
-
-const homeworkProject = new Project("homework");
-homeworkProject.addToDo(math);
-console.log(homeworkProject)
-
-console.log(projects)
+console.log(defaultProject)
