@@ -116,7 +116,7 @@ eval("\n\n/* istanbul ignore next  */\nfunction styleTagTransform(css, styleElem
   \********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   Project: () => (/* binding */ Project),\n/* harmony export */   ToDo: () => (/* binding */ ToDo),\n/* harmony export */   projects: () => (/* binding */ projects)\n/* harmony export */ });\nconst projects = []\n\nclass Project {\n  constructor(projectName) {\n    this.name = projectName;\n    this.todos = [];\n    projects.push(this)\n  }\n\n  addToDo(todo) {\n    this.todos.push(todo);\n  }\n}\n\nclass ToDo {\n  constructor(title, description, dueDate, difficulty, priority) {\n    this.title = title;\n    this.description = description;\n    this.priority = priority;\n    this.difficulty = difficulty;\n    this.due = dueDate;\n  }\n}\n\n\n\n//# sourceURL=webpack://taskquest/./src/app.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   Project: () => (/* binding */ Project),\n/* harmony export */   ToDo: () => (/* binding */ ToDo),\n/* harmony export */   projects: () => (/* binding */ projects)\n/* harmony export */ });\n// application logic\nconst projects = []\n\nclass Project {\n  constructor(projectName, initialToDos) {\n    this.name = projectName;\n    this.todos = initialToDos || []; // To-dos are organized as projects\n    projects.push(this); // add this Project to list of projects\n  }\n\n  addToDo(todo) {\n    this.todos.push(todo);\n  }\n}\n\nclass ToDo {\n  constructor(title, description, dueDate, difficulty, priority) {\n    this.title = title;\n    this.description = description;\n    this.priority = priority;\n    this.difficulty = difficulty;\n    this.due = dueDate;\n  }\n}\n\n\n\n//# sourceURL=webpack://taskquest/./src/app.js?");
 
 /***/ }),
 
@@ -126,7 +126,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
   \**********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./style.scss */ \"./src/style.scss\");\n/* harmony import */ var _app__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./app */ \"./src/app.js\");\n\n\n\nconst math = new _app__WEBPACK_IMPORTED_MODULE_1__.ToDo(\"Math homework\", \"Exercise 11.1, Exercise 11.2, Exercise 11.3\", \"Thursday\", \"hard\", \"high\");\n\nconsole.log(math)\n\nconst homeworkProject = new _app__WEBPACK_IMPORTED_MODULE_1__.Project(\"homework\");\nhomeworkProject.addToDo(math);\nconsole.log(homeworkProject)\n\nconsole.log(_app__WEBPACK_IMPORTED_MODULE_1__.projects)\n\n//# sourceURL=webpack://taskquest/./src/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./style.scss */ \"./src/style.scss\");\n/* harmony import */ var _app__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./app */ \"./src/app.js\");\n\n\n\nconst defaultProject = new _app__WEBPACK_IMPORTED_MODULE_1__.Project(\"Default Project\");\n\nconsole.log(defaultProject)\n\n//# sourceURL=webpack://taskquest/./src/index.js?");
 
 /***/ })
 
