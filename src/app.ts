@@ -21,7 +21,7 @@ class Project {
     this.todos.push(todo);
   }
 
-  finishToDo(title: string) {
+  deleteToDo(title: string) {
     this.todos = this.todos.filter(
       item => item.title !== title
     );
