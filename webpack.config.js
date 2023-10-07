@@ -23,4 +23,8 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.js'],
   },
+  devtool: 'inline-source-map',
+  devServer: {
+    static: './dist',
+  },
 }

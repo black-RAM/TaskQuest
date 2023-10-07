@@ -1,4 +1,5 @@
 import "./style.scss";
+import "./buttons.js";
 import { projects, Project, ToDo } from "./app";
 
 const defaultProject = new Project("Default Project", [
