@@ -3,14 +3,16 @@
   const menuIcon = document.getElementById("menu-icon");
   const menu = document.getElementById("menu");
 
-  // hide menu on screens under 575px
   function checkScreenWidth() {
+    // hide menu, show icon
     if (window.innerWidth < 575) {
       menu.classList.add("d-none");
       menu.classList.add("position-absolute")
+      menuIcon.classList.remove("d-none")
     } else {
       menu.classList.remove("d-none");
       menu.classList.remove("position-absolute")
+      menuIcon.classList.add("d-none")
     }
   }
 
