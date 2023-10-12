@@ -42,11 +42,24 @@
           <i class="bi bi-calendar-fill"></i>
           <h2 class="h1">All Tasks</h2>
         </header>
-        <!-- dummy content -->
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eleifend, arcu at varius euismod, felis velit suscipit ligula, non laoreet odio lectus a nunc. Sed nec lacus auctor, vehicula justo ut, volutpat tellus. In hac habitasse platea dictumst.</p>
-        <p>Phasellus nec tincidunt velit. Curabitur eu bibendum nunc. Vestibulum euismod sem non justo facilisis, eu bibendum arcu tristique. Sed vel velit eget eros convallis tristique. Nullam vestibulum metus nec libero consequat vehicula.</p>
-        <p>Integer vel condimentum urna, ut dignissim purus. Aliquam sit amet bibendum orci. Fusce eget quam massa. Sed euismod, mi nec efficitur tristique, odio justo feugiat sapien, non vehicula nisi risus quis velit.</p>
-        <p>Vivamus eu erat vel turpis convallis posuere vel non urna. Quisque ut justo non ex faucibus vehicula. Curabitur scelerisque euismod quam, in vestibulum nulla dictum id. Nunc in justo sed libero facilisis convallis.</p>
+
+        <article class="to-do d-flex justify-content-between p-2 bg-light rounded">
+          <!-- elements on the left -->
+          <div class="d-flex align-items-center gap-2">
+            <input class="form-check-input m-0" type="checkbox" id="completeCheck">
+            <label class="form-check-label" for="completeCheck">Revise for Exams</label>            
+          </div>
+
+          <!-- elements on the right -->
+          <div class="d-flex align-items-center gap-2">
+            <p class="due-date m-0">12 Oct</p>
+            <button class="btn btn-outline-secondary" type="button">Details</button>
+            <button class="btn" type="button" title="edit"><i class="bi bi-pencil-square"></i></button>
+            <button class="btn" type="button" title="delete"><i class="bi bi-trash"></i></button>            
+          </div>
+
+        </article>
+
       </section>
     </main>
 
