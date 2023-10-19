@@ -1,4 +1,5 @@
 import { renderProject } from "./template";
+import { pubSub } from "./pubsub";
 
 type Scale = 1 | 2 | 3;
 
@@ -14,7 +15,8 @@ class ToDo {
 class Project {
   constructor(
     public name: string,
-    public todos: ToDo[] = []
+    public todos: ToDo[] = [],
+    public icon: String = "bi-calendar-fill"
   ) {
     projects.push(this);
     if (todos) {
@@ -24,6 +26,7 @@ class Project {
 
   addToDo(todo: ToDo) {
     this.todos.push(todo);
+    pubSub.publish("todo-added", todo);
   }
 
   deleteToDo(title: string) {

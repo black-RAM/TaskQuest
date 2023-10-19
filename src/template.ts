@@ -1,9 +1,28 @@
 import { Project, ToDo } from "./app";
+import { pubSub } from "./pubsub";
+
+const projectContainer = document.createElement("section");
+projectContainer.classList.add("to-do-page");
 
 function renderProject(project: Project) {
+
+  const heading = document.createElement("header");
+  const title = document.createElement("h2");
+  title.innerText = project.name;
+  const icon = document.createElement("i");
+  icon.classList.add("bi");
+  icon.classList.add(`${project.icon}`);
+
+  heading.appendChild(icon)
+  heading.appendChild(title)
+
+  projectContainer.appendChild(heading)
+
   for (const toDo of project.todos) {
     renderToDo(toDo);
   }
+
+  document.getElementsByTagName("main")[0].appendChild(projectContainer);
 }
 
 function renderToDo(toDo: ToDo) {
@@ -53,8 +72,10 @@ function renderToDo(toDo: ToDo) {
   element.appendChild(leftDiv);
   element.appendChild(rightDiv);
 
-  document.querySelector("section.to-do-page")?.appendChild(element);
+  projectContainer.appendChild(element);
 
 }
+
+pubSub.subscribe("todo-added", renderToDo);
 
 export { renderProject }
