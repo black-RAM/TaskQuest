@@ -1,5 +1,6 @@
 import { Project, ToDo } from "./app";
 import { pubSub } from "./pubsub";
+import { format } from 'date-fns';
 
 const projectContainer = document.createElement("section");
 projectContainer.classList.add("to-do-page");
@@ -63,7 +64,7 @@ function renderToDo(toDo: ToDo) {
   leftDiv.appendChild(checkBox)
   leftDiv.appendChild(toDoTitle)
 
-  dueDateP.innerText = "1 Jan";
+  dueDateP.innerText = format(toDo.due, "d LLL");
   rightDiv.appendChild(dueDateP);
   rightDiv.appendChild(detailsButton);
   rightDiv.appendChild(editButton);

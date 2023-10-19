@@ -8,5 +8,5 @@ const defaultProject = new Project("All Tasks", [
 ]);
 
 defaultProject.addToDo(
-  new ToDo("Exams", "Do French speaking", new Date(2023), 3)
+  new ToDo("Exams", "Do French speaking", new Date(2023, 11, 5), 3)
 )
