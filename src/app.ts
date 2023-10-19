@@ -1,3 +1,5 @@
+import { renderProject } from "./template";
+
 type Scale = 1 | 2 | 3;
 
 class ToDo {
@@ -15,6 +17,9 @@ class Project {
     public todos: ToDo[] = []
   ) {
     projects.push(this);
+    if (todos) {
+      renderProject(this);
+    }
   }
 
   addToDo(todo: ToDo) {

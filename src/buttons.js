@@ -33,6 +33,7 @@
     const hgroupHeight = document.querySelector("hgroup").offsetHeight;
     const availableHeight = window.innerHeight - (hgroupHeight + 30);
     document.querySelector("main").style.minHeight = availableHeight + "px";
+    document.querySelector("nav").style.minHeight = availableHeight + "px";
   }
 
   // Add an event listener to update the main section height when the page loads and on resize
