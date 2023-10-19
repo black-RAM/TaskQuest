@@ -13,7 +13,7 @@ section.to-do-page {
   }
 
   article {
-    @extend .d-flex, .justify-content-between, .p-2, .bg-light, .rounded;
+    @extend .d-flex, .justify-content-between, .p-2, .bg-light, .rounded, .mb-3;
 
     div {
       @extend .d-flex, .align-items-center, .gap-2;
