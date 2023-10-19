@@ -41,6 +41,12 @@ function renderToDo(toDo: ToDo) {
   const dueDateP = document.createElement("p");
 
   // attributes
+  element.classList.add(
+    toDo.priority === 1 ? "priority-low" :
+      toDo.priority === 2 ? "priority-medium" :
+        "priority-high"
+  )
+
   checkBox.type = "checkbox";
   checkBox.id = "completeCheck";
   toDoTitle.htmlFor = "completeCheck";
