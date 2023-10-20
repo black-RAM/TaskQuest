@@ -41,12 +41,13 @@ function renderToDo(toDo: ToDo) {
   const dueDateP = document.createElement("p");
 
   // attributes
+
   element.classList.add(
     toDo.priority === 1 ? "priority-low" :
       toDo.priority === 2 ? "priority-medium" :
         "priority-high"
   )
-
+  rightDiv.id = `${toDo.title}-btn-div`.toLocaleLowerCase().replace(' ', '-')
   checkBox.type = "checkbox";
   checkBox.id = "completeCheck";
   toDoTitle.htmlFor = "completeCheck";
@@ -59,6 +60,7 @@ function renderToDo(toDo: ToDo) {
   editButton.title = "edit";
   deleteButton.title = "delete";
   detailsButton.classList.add("btn-outline-secondary");
+  detailsButton.id = "details-btn";
 
   detailsButton.innerText = "Details";
   editButton.innerHTML = '<i class="bi bi-pencil-square"></i>';

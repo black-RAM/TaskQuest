@@ -1,4 +1,4 @@
-// menu-related code in IIFE
+// collapse menu on mobile
 (function () {
   const menuIcon = document.getElementById("menu-icon");
   const menu = document.getElementById("menu");
@@ -40,3 +40,17 @@
   window.addEventListener('load', setMainSectionHeight);
   window.addEventListener('resize', setMainSectionHeight);
 })();
+
+// details button
+setTimeout(() => {
+  const btn = document.getElementById("details-btn");
+
+  const toDoID = btn.parentElement.id;
+  const container = document.createElement("aside");
+  container.classList.add("details")
+
+  btn.addEventListener("click", () => {
+    document.getElementById(toDoID).appendChild(container);
+  })
+
+}, 100);
