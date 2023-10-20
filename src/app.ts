@@ -4,27 +4,42 @@ import { pubSub } from "./pubsub";
 type Scale = 1 | 2 | 3;
 
 class ToDo {
+  priority: String;
+  projectName: String;
+
   constructor(
     public title: string,
     public description: string,
     public due: Date,
-    public priority: Scale
-  ) { }
+    public priorityNum: Scale
+  ) {
+    this.priority = priorityNum === 3 ? "high" : priorityNum === 2 ? "medium" : "low";
+    this.projectName = "undefined";
+  }
 }
 
 class Project {
+  todos: ToDo[];
+
   constructor(
     public name: string,
-    public todos: ToDo[] = [],
+    public initialTodos?: ToDo[],
     public icon: String = "bi-calendar-fill"
   ) {
-    projects.push(this);
-    if (todos) {
-      renderProject(this);
+    this.todos = [];
+    renderProject(this);
+
+    if (initialTodos) {
+      for (const todo of initialTodos) {
+        this.addToDo(todo)
+      }
     }
+
+    projects.push(this);
   }
 
   addToDo(todo: ToDo) {
+    todo.projectName = this.name;
     this.todos.push(todo);
     pubSub.publish("todo-added", todo);
   }

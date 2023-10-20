@@ -34,6 +34,17 @@ section.to-do-page {
     button {
       @extend .btn;
     }
+
+    dialog.details {
+      position: absolute;
+      max-width: 300px;
+
+      button {
+        position: absolute;
+        top: 0;
+        right: 0;
+      }
+    }
   }
 
   // color-coded priority border

@@ -19,34 +19,25 @@ function renderProject(project: Project) {
 
   projectContainer.appendChild(heading)
 
-  for (const toDo of project.todos) {
-    renderToDo(toDo);
-  }
-
   document.getElementsByTagName("main")[0].appendChild(projectContainer);
 }
 
 function renderToDo(toDo: ToDo) {
-  console.log(`to-do title: ${toDo.title};\ndescription: ${toDo.description}`);
-
   // HTML elements for to-do article
   const element = document.createElement("article");
   const leftDiv = document.createElement("div");
   const rightDiv = document.createElement("div");
   const checkBox = document.createElement("input");
   const toDoTitle = document.createElement("label");
+  const dueDateP = document.createElement("p");
   const detailsButton = document.createElement("button");
   const editButton = document.createElement("button");
   const deleteButton = document.createElement("button");
-  const dueDateP = document.createElement("p");
+  const detailsModal = document.createElement("dialog");
+  const closeDetailsModal = document.createElement("button");
 
   // attributes
-  element.classList.add(
-    toDo.priority === 1 ? "priority-low" :
-      toDo.priority === 2 ? "priority-medium" :
-        "priority-high"
-  )
-  rightDiv.id = `${toDo.title}-btn-div`.toLocaleLowerCase().replace(' ', '-')
+  element.classList.add(`priority-${toDo.priority}`);
   checkBox.type = "checkbox";
   checkBox.id = "completeCheck";
   toDoTitle.htmlFor = "completeCheck";
@@ -55,26 +46,53 @@ function renderToDo(toDo: ToDo) {
   editButton.type = "button";
   deleteButton.type = "button";
   detailsButton.type = "button";
+  closeDetailsModal.type = "button";
 
   editButton.title = "edit";
   deleteButton.title = "delete";
   detailsButton.classList.add("btn-outline-secondary");
+  detailsModal.classList.add("details")
+  closeDetailsModal.classList.add("close-details")
 
+  // content
+  toDoTitle.innerText = toDo.title;
+  dueDateP.innerText = format(toDo.due, "d LLL");
   detailsButton.innerText = "Details";
   editButton.innerHTML = '<i class="bi bi-pencil-square"></i>';
   deleteButton.innerHTML = '<i class="bi bi-trash"></i>';
+  closeDetailsModal.innerHTML = '<i class="bi bi-x-square"></i>'
+  detailsModal.innerHTML =
+    `<h3>${toDo.title}</h3>
+    <p><b>Project:</b> ${toDo.projectName}</p>
+    <p><b>Priority:</b> ${toDo.priority}</p>
+    <p><b>Description:</b> ${toDo.description}</p>
+    <p><b>Due Date:</b> ${format(toDo.due, "do MMMM, Y")}</p>`;
 
-  // finally, adding content to the DOM
-  toDoTitle.innerText = toDo.title;
+  // details button
+  detailsButton.addEventListener("click", () => {
+    // position modal under to-do element
+    const buttonPos = detailsButton.getBoundingClientRect()
+    detailsModal.style.top = `${Math.round(buttonPos.top) + 50}px`
+    detailsModal.style.left = `${Math.round(buttonPos.left) - 100}px`
+
+    detailsModal.showModal()
+  })
+
+  closeDetailsModal.addEventListener("click", () => {
+    detailsModal.close()
+  })
+
+  // finally, appending elements to the DOM
+  detailsModal.appendChild(closeDetailsModal)
 
   leftDiv.appendChild(checkBox)
   leftDiv.appendChild(toDoTitle)
 
-  dueDateP.innerText = format(toDo.due, "d LLL");
-  rightDiv.appendChild(dueDateP);
-  rightDiv.appendChild(detailsButton);
-  rightDiv.appendChild(editButton);
+  rightDiv.appendChild(dueDateP)
+  rightDiv.appendChild(detailsButton)
+  rightDiv.appendChild(editButton)
   rightDiv.appendChild(deleteButton)
+  rightDiv.appendChild(detailsModal)
 
   element.appendChild(leftDiv);
   element.appendChild(rightDiv);
