@@ -1,4 +1,4 @@
-import { renderProject } from "./template";
+import { renderProject } from "./";
 import { pubSub } from "./pubsub";
 
 type Scale = 1 | 2 | 3;

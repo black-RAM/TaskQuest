@@ -1,5 +1,5 @@
 import "./style.scss";
-import "./buttons.js";
+import "./resizer.js";
 import { projects, Project, ToDo } from "./app";
 
 const defaultProject = new Project("All Tasks", [
