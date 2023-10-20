@@ -47,7 +47,6 @@ function renderToDo(toDo: ToDo) {
       toDo.priority === 2 ? "priority-medium" :
         "priority-high"
   )
-  rightDiv.id = `${toDo.title}-btn-div`.toLocaleLowerCase().replace(' ', '-')
   checkBox.type = "checkbox";
   checkBox.id = "completeCheck";
   toDoTitle.htmlFor = "completeCheck";

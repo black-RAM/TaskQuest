@@ -34,16 +34,6 @@ section.to-do-page {
     button {
       @extend .btn;
     }
-
-    // details popup
-    aside.details {
-      position: absolute;
-      top: 100px;
-      right: 100px;
-      height: 100px;
-      width: 100px;
-      background: #00000080;
-    }
   }
 
   // color-coded priority border
