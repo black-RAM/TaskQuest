@@ -5,6 +5,17 @@ import { format } from 'date-fns';
 const projectContainer = document.createElement("section");
 projectContainer.classList.add("to-do-page");
 
+function addProject(project: Project) {
+  const projectList = document.getElementById("project-list");
+  const listElement = document.createElement("li");
+  listElement.innerText = project.name;
+  listElement.addEventListener("click", () => {
+    clearPage()
+    renderProject(project)
+  })
+  projectList?.appendChild(listElement)
+}
+
 function renderProject(project: Project) {
 
   const heading = document.createElement("header");
@@ -20,6 +31,12 @@ function renderProject(project: Project) {
   projectContainer.appendChild(heading)
 
   document.getElementsByTagName("main")[0].appendChild(projectContainer);
+
+  if (project.initialTodos) {
+    for (const todo of project.initialTodos) {
+      project.addToDo(todo)
+    }
+  }
 }
 
 function renderToDo(toDo: ToDo) {
@@ -103,4 +120,8 @@ function renderToDo(toDo: ToDo) {
 
 pubSub.subscribe("todo-added", renderToDo);
 
-export { renderProject }
+function clearPage() {
+  projectContainer.innerHTML = ""
+}
+
+export { addProject }

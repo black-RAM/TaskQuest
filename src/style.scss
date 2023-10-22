@@ -1,6 +1,10 @@
 @import "bootstrap/scss/bootstrap";
 @import "bootstrap-icons/font/bootstrap-icons.css";
 
+nav li {
+  @extend .link-opacity-75, .link-opacity-100-hover, .link-underline-opacity-0, .link-secondary;
+}
+
 section.to-do-page {
   @extend .col-12, .col-sm-8, .col-lg-10, .bg-body-secondary, .p-4;
 

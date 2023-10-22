@@ -1,4 +1,4 @@
-import { renderProject } from "./";
+import { addProject } from "./display";
 import { pubSub } from "./pubsub";
 
 type Scale = 1 | 2 | 3;
@@ -27,15 +27,8 @@ class Project {
     public icon: String = "bi-calendar-fill"
   ) {
     this.todos = [];
-    renderProject(this);
-
-    if (initialTodos) {
-      for (const todo of initialTodos) {
-        this.addToDo(todo)
-      }
-    }
-
     projects.push(this);
+    addProject(this)
   }
 
   addToDo(todo: ToDo) {
