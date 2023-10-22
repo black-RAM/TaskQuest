@@ -1,3 +1,4 @@
+import { filterImportant, filterThisWeek, filterToday, noFilter } from "./filters";
 import { addProject } from "./display";
 import { pubSub } from "./pubsub";
 
@@ -51,4 +52,26 @@ class Project {
 
 const projects: Project[] = [];
 
-export { projects, Project, ToDo };
+class Category {
+  name: string;
+  todos: ToDo[];
+
+  constructor(name: string, private filterFunction: (todos: ToDo[]) => ToDo[]) {
+    this.todos = [];
+    this.name = name;
+    this.filterFunction = filterFunction;
+    pubSub.subscribe("todo-added", this.updateCategory.bind(this))
+  }
+
+  updateCategory(newToDo: ToDo) {
+    this.todos = this.filterFunction([...this.todos, newToDo]);
+  }
+}
+
+// Create categories with custom filter functions
+const allTasksCategory = new Category("ALl Tasks", noFilter)
+const importantCategory = new Category("Important", filterImportant)
+const thisWeekCategory = new Category("This Week", filterThisWeek)
+const todayCategory = new Category("Today", filterToday)
+
+export { Project, ToDo };
