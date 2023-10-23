@@ -1,12 +1,20 @@
-import { Project, ToDo } from "./app";
+import { Category, Project, ToDo } from "./app";
 import { pubSub } from "./pubsub";
 import { format } from 'date-fns';
 
 const projectContainer = document.createElement("section");
 projectContainer.classList.add("to-do-page");
 
-function addProject(project: Project) {
-  const projectList = document.getElementById("project-list");
+function addProject(project: Project | Category) {
+  // show all tasks on startup
+  if (project.name === "All Tasks") {
+    setTimeout(() => {
+      renderProject(project)
+    }, 10); // 10ms delay to allow all to-dos to initialise
+  };
+
+  const type = project instanceof Project ? "project" : "category";
+  const projectList = document.getElementById(`${type}-list`);
   const listElement = document.createElement("li");
   listElement.innerText = project.name;
   listElement.addEventListener("click", () => {
@@ -16,7 +24,7 @@ function addProject(project: Project) {
   projectList?.appendChild(listElement)
 }
 
-function renderProject(project: Project) {
+function renderProject(project: Project | Category) {
 
   const heading = document.createElement("header");
   const title = document.createElement("h2");
@@ -32,9 +40,15 @@ function renderProject(project: Project) {
 
   document.getElementsByTagName("main")[0].appendChild(projectContainer);
 
-  if (project.initialTodos) {
-    for (const todo of project.initialTodos) {
-      project.addToDo(todo)
+  if (project instanceof Project) {
+    if (project.initialTodos) {
+      for (const todo of project.initialTodos) {
+        project.addToDo(todo)
+      }
+    }
+  } else {
+    for (const todo of project.todos) {
+      renderToDo(todo)
     }
   }
 }

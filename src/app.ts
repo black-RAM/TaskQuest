@@ -30,6 +30,10 @@ class Project {
     this.todos = [];
     projects.push(this);
     addProject(this)
+
+    this.initialTodos?.forEach(todo => {
+      todo.projectName = this.name;
+    })
     pubSub.publish("todo-stored", this.initialTodos)
   }
 
@@ -60,8 +64,13 @@ const projects: Project[] = [];
 class Category {
   todos: ToDo[];
 
-  constructor(public name: string, private filterFunction: (todos: ToDo[]) => ToDo[]) {
+  constructor(
+    public name: string,
+    private filterFunction: (todos: ToDo[]) => ToDo[],
+    public icon: String = "bi-calendar-fill"
+  ) {
     this.todos = [];
+    addProject(this)
     pubSub.subscribe("todo-stored", this.updateCategory.bind(this))
   }
 
@@ -71,14 +80,9 @@ class Category {
 }
 
 // Create categories with custom filter functions
-const allTasksCategory = new Category("ALl Tasks", noFilter)
-const importantCategory = new Category("Important", filterImportant)
-const thisWeekCategory = new Category("This Week", filterThisWeek)
-const todayCategory = new Category("Today", filterToday)
+const allTasksCategory = new Category("All Tasks", noFilter, "bi-calendar-check-fill")
+const importantCategory = new Category("Important", filterImportant, "bi-star-fill")
+const todayCategory = new Category("Today", filterToday, "bi-calendar-event-fill")
+const thisWeekCategory = new Category("This Week", filterThisWeek, "bi-calendar-week-fill")
 
-// test; timeout to allow project constructors to finish running
-setTimeout(() => {
-  console.log(allTasksCategory.todos)
-}, 5);
-
-export { Project, ToDo };
+export { Category, Project, ToDo };

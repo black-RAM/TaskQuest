@@ -9,7 +9,7 @@ section.to-do-page {
   @extend .col-12, .col-sm-8, .col-lg-10, .bg-body-secondary, .p-4;
 
   header {
-    @extend .fs-4, .mb-3, .bg-success-subtle, .p-3, .d-flex, .align-items-center, .gap-4;
+    @extend .fs-2, .mb-3, .bg-success-subtle, .p-3, .d-flex, .align-items-center, .gap-4;
 
     h2 {
       @extend .h1;
