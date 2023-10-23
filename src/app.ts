@@ -15,7 +15,7 @@ class ToDo {
     public priorityNum: Scale
   ) {
     this.priority = priorityNum === 3 ? "high" : priorityNum === 2 ? "medium" : "low";
-    this.projectName = "undefined";
+    this.projectName = "";
   }
 }
 
@@ -30,12 +30,17 @@ class Project {
     this.todos = [];
     projects.push(this);
     addProject(this)
+    pubSub.publish("todo-stored", this.initialTodos)
   }
 
   addToDo(todo: ToDo) {
     todo.projectName = this.name;
     this.todos.push(todo);
     pubSub.publish("todo-added", todo);
+
+    if (!this.initialTodos?.includes(todo)) {
+      pubSub.publish("todo-stored", [todo])
+    }
   }
 
   deleteToDo(title: string) {
@@ -53,18 +58,15 @@ class Project {
 const projects: Project[] = [];
 
 class Category {
-  name: string;
   todos: ToDo[];
 
-  constructor(name: string, private filterFunction: (todos: ToDo[]) => ToDo[]) {
+  constructor(public name: string, private filterFunction: (todos: ToDo[]) => ToDo[]) {
     this.todos = [];
-    this.name = name;
-    this.filterFunction = filterFunction;
-    pubSub.subscribe("todo-added", this.updateCategory.bind(this))
+    pubSub.subscribe("todo-stored", this.updateCategory.bind(this))
   }
 
-  updateCategory(newToDo: ToDo) {
-    this.todos = this.filterFunction([...this.todos, newToDo]);
+  updateCategory(newToDos: ToDo[]) {
+    this.todos = this.filterFunction([...this.todos, ...newToDos]);
   }
 }
 
@@ -73,5 +75,10 @@ const allTasksCategory = new Category("ALl Tasks", noFilter)
 const importantCategory = new Category("Important", filterImportant)
 const thisWeekCategory = new Category("This Week", filterThisWeek)
 const todayCategory = new Category("Today", filterToday)
+
+// test; timeout to allow project constructors to finish running
+setTimeout(() => {
+  console.log(allTasksCategory.todos)
+}, 5);
 
 export { Project, ToDo };
