@@ -145,4 +145,11 @@ function clearPage() {
   projectContainer.innerHTML = ""
 }
 
+function removeToDo(index: Number) {
+  const deletion = document.querySelector(`article[data-index="${index}"]`)
+  if (deletion) projectContainer.removeChild(deletion);
+}
+
+pubSub.subscribe("todo-deleted", removeToDo)
+
 export { addProject }

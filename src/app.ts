@@ -51,7 +51,7 @@ class Project {
     for (const todo of this.todos) {
       if (todo.title.toLocaleLowerCase() == title.toLocaleLowerCase()) {
         const index = this.todos.indexOf(todo)
-        const deletion = this.todos.splice(index, 1)
+        this.todos.splice(index, 1)
         pubSub.publish("todo-deleted", index)
         return true;
       }
