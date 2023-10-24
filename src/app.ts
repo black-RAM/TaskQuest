@@ -48,9 +48,15 @@ class Project {
   }
 
   deleteToDo(title: string) {
-    this.todos = this.todos.filter(
-      item => item.title !== title
-    );
+    for (const todo of this.todos) {
+      if (todo.title.toLocaleLowerCase() == title.toLocaleLowerCase()) {
+        const index = this.todos.indexOf(todo)
+        const deletion = this.todos.splice(index, 1)
+        pubSub.publish("todo-deleted", ...deletion)
+        return true;
+      }
+    }
+    return false;
   }
 
   delete() {
