@@ -48,12 +48,12 @@ function renderProject(project: Project | Category) {
     }
   } else {
     for (const todo of project.todos) {
-      renderToDo(todo)
+      renderToDo(todo, true)
     }
   }
 }
 
-function renderToDo(toDo: ToDo) {
+function renderToDo(toDo: ToDo, isCategory: Boolean = false) {
   // HTML elements for to-do article
   const element = document.createElement("article");
   const leftDiv = document.createElement("div");
@@ -104,8 +104,6 @@ function renderToDo(toDo: ToDo) {
     // position modal under to-do element
     const buttonPos = detailsButton.getBoundingClientRect()
     detailsModal.style.top = `${Math.round(buttonPos.top) + 50}px`
-    detailsModal.style.left = `${Math.round(buttonPos.left) - 100}px`
-
     detailsModal.showModal()
   })
 
@@ -121,9 +119,12 @@ function renderToDo(toDo: ToDo) {
 
   rightDiv.appendChild(dueDateP)
   rightDiv.appendChild(detailsButton)
-  rightDiv.appendChild(editButton)
-  rightDiv.appendChild(deleteButton)
   rightDiv.appendChild(detailsModal)
+
+  if (!isCategory) {
+    rightDiv.appendChild(editButton)
+    rightDiv.appendChild(deleteButton)
+  }
 
   element.appendChild(leftDiv);
   element.appendChild(rightDiv);

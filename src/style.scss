@@ -41,7 +41,9 @@ section.to-do-page {
 
     dialog.details {
       position: absolute;
-      max-width: 300px;
+      left: calc(100vw - 300px - 1.5rem);
+      right: 1.5rem;
+      width: 300px;
 
       button {
         position: absolute;
