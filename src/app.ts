@@ -37,10 +37,10 @@ class Project {
     pubSub.publish("todo-stored", this.initialTodos)
   }
 
-  addToDo(todo: ToDo) {
+  addToDo(todo: ToDo, index: Number) {
     todo.projectName = this.name;
     this.todos.push(todo);
-    pubSub.publish("todo-added", todo);
+    pubSub.publish("todo-added", [todo, index, true]);
 
     if (!this.initialTodos?.includes(todo)) {
       pubSub.publish("todo-stored", [todo])
@@ -52,7 +52,7 @@ class Project {
       if (todo.title.toLocaleLowerCase() == title.toLocaleLowerCase()) {
         const index = this.todos.indexOf(todo)
         const deletion = this.todos.splice(index, 1)
-        pubSub.publish("todo-deleted", ...deletion)
+        pubSub.publish("todo-deleted", index)
         return true;
       }
     }

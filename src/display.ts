@@ -40,20 +40,25 @@ function renderProject(project: Project | Category) {
 
   document.getElementsByTagName("main")[0].appendChild(projectContainer);
 
-  if (project instanceof Project) {
-    if (project.initialTodos) {
-      for (const todo of project.initialTodos) {
-        project.addToDo(todo)
-      }
+  if (project instanceof Project && project.initialTodos) {
+    for (let i = 0; i < project.initialTodos.length; i++) {
+      const todo = project.initialTodos[i];
+      project.addToDo(todo, i)
     }
   } else {
-    for (const todo of project.todos) {
-      renderToDo(todo, true)
+    for (let i = 0; i < project.todos.length; i++) {
+      const todo = project.todos[i];
+      renderToDo([todo, i, false])
     }
   }
 }
 
-function renderToDo(toDo: ToDo, isCategory: Boolean = false) {
+function renderToDo(parameters: [toDo: ToDo, index: Number, isProject: Boolean]) {
+  // spread parameters of tuple
+  const toDo = parameters[0];
+  const index = parameters[1];
+  const isProject = parameters[2];
+
   // HTML elements for to-do article
   const element = document.createElement("article");
   const leftDiv = document.createElement("div");
@@ -68,6 +73,7 @@ function renderToDo(toDo: ToDo, isCategory: Boolean = false) {
   const closeDetailsModal = document.createElement("button");
 
   // attributes
+  element.dataset.index = String(index);
   element.classList.add(`priority-${toDo.priority}`);
   checkBox.type = "checkbox";
   checkBox.id = "completeCheck";
@@ -121,7 +127,7 @@ function renderToDo(toDo: ToDo, isCategory: Boolean = false) {
   rightDiv.appendChild(detailsButton)
   rightDiv.appendChild(detailsModal)
 
-  if (!isCategory) {
+  if (isProject) {
     rightDiv.appendChild(editButton)
     rightDiv.appendChild(deleteButton)
   }
