@@ -12,3 +12,10 @@ new Project("Chill", [
   new ToDo("Netflix", "Binge that new series", new Date(2023, 9, 22), 1),
   new ToDo("Painting", "Relax with watercolor", new Date(2023, 9, 24), 1)
 ], "bi-tv-fill")
+
+// timeout to navigate to goals page
+setTimeout(() => {
+  goals.addToDo(
+    new ToDo("Relationships", "Get a girlfriend", new Date(2026, 0, 1), 1)
+  )
+}, 3000);

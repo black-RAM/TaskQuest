@@ -37,7 +37,8 @@ class Project {
     pubSub.publish("todo-stored", this.initialTodos)
   }
 
-  addToDo(todo: ToDo, index: Number) {
+  addToDo(todo: ToDo) {
+    const index = this.todos.length;
     todo.projectName = this.name;
     this.todos.push(todo);
     pubSub.publish("todo-added", [todo, index, this]);
@@ -49,8 +50,9 @@ class Project {
 
   deleteToDo(todo: ToDo) {
     const index = this.todos.indexOf(todo)
-    this.todos.splice(index, 1)
+    const deletion = this.todos.splice(index, 1)[0]
     pubSub.publish("todo-deleted", index)
+    pubSub.publish("todo-storage-deleted", deletion)
   }
 
   delete() {
@@ -72,10 +74,15 @@ class Category {
     this.todos = [];
     addProject(this)
     pubSub.subscribe("todo-stored", this.updateCategory.bind(this))
+    pubSub.subscribe("todo-storage-deleted", this.removeFromCategory.bind(this))
   }
 
   updateCategory(newToDos: ToDo[]) {
     this.todos = this.filterFunction([...this.todos, ...newToDos]);
+  }
+
+  removeFromCategory(deletion: ToDo) {
+    this.todos = this.todos.filter(todo => todo !== deletion)
   }
 }
 

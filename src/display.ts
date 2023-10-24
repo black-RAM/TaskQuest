@@ -41,15 +41,15 @@ function renderProject(project: Project | Category) {
   document.getElementsByTagName("main")[0].appendChild(projectContainer);
 
   if (project instanceof Project && project.initialTodos) {
-    for (let i = 0; i < project.initialTodos.length; i++) {
-      const todo = project.initialTodos[i];
-      project.addToDo(todo, i)
+    for (const todo of project.initialTodos) {
+      project.addToDo(todo)
     }
+
+    project.initialTodos = undefined;
   } else {
-    for (let i = 0; i < project.todos.length; i++) {
-      const todo = project.todos[i];
-      renderToDo([todo, i, project])
-    }
+    project.todos.forEach((todo, i) => {
+      renderToDo([todo, i, project]);
+    });
   }
 }
 
@@ -74,7 +74,6 @@ function renderToDo(parameters: [toDo: ToDo, index: Number, project: Project | C
   const closeDetailsModal = document.createElement("button");
 
   // attributes
-  element.dataset.index = String(index);
   element.classList.add(`priority-${toDo.priority}`);
   checkBox.type = "checkbox";
   checkBox.id = "completeCheck";
@@ -131,7 +130,7 @@ function renderToDo(parameters: [toDo: ToDo, index: Number, project: Project | C
   if (isProject) {
     rightDiv.appendChild(editButton)
     rightDiv.appendChild(deleteButton)
-
+    element.dataset.index = String(index);
     // delete button
     deleteButton.addEventListener("click", () => {
       project.deleteToDo(toDo)
