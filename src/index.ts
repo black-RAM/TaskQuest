@@ -12,8 +12,3 @@ new Project("Chill", [
   new ToDo("Netflix", "Binge that new series", new Date(2023, 9, 22), 1),
   new ToDo("Painting", "Relax with watercolor", new Date(2023, 9, 24), 1)
 ], "bi-tv-fill")
-
-// navigate to project page first
-setTimeout(() => {
-  goals.deleteToDo("Gym")
-}, 5000);

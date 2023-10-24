@@ -48,16 +48,17 @@ function renderProject(project: Project | Category) {
   } else {
     for (let i = 0; i < project.todos.length; i++) {
       const todo = project.todos[i];
-      renderToDo([todo, i, false])
+      renderToDo([todo, i, project])
     }
   }
 }
 
-function renderToDo(parameters: [toDo: ToDo, index: Number, isProject: Boolean]) {
+function renderToDo(parameters: [toDo: ToDo, index: Number, project: Project | Category]) {
   // spread parameters of tuple
   const toDo = parameters[0];
   const index = parameters[1];
-  const isProject = parameters[2];
+  const project = parameters[2]
+  const isProject = project instanceof Project;
 
   // HTML elements for to-do article
   const element = document.createElement("article");
@@ -130,6 +131,11 @@ function renderToDo(parameters: [toDo: ToDo, index: Number, isProject: Boolean])
   if (isProject) {
     rightDiv.appendChild(editButton)
     rightDiv.appendChild(deleteButton)
+
+    // delete button
+    deleteButton.addEventListener("click", () => {
+      project.deleteToDo(toDo)
+    })
   }
 
   element.appendChild(leftDiv);

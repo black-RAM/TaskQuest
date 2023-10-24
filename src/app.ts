@@ -40,23 +40,17 @@ class Project {
   addToDo(todo: ToDo, index: Number) {
     todo.projectName = this.name;
     this.todos.push(todo);
-    pubSub.publish("todo-added", [todo, index, true]);
+    pubSub.publish("todo-added", [todo, index, this]);
 
     if (!this.initialTodos?.includes(todo)) {
       pubSub.publish("todo-stored", [todo])
     }
   }
 
-  deleteToDo(title: string) {
-    for (const todo of this.todos) {
-      if (todo.title.toLocaleLowerCase() == title.toLocaleLowerCase()) {
-        const index = this.todos.indexOf(todo)
-        this.todos.splice(index, 1)
-        pubSub.publish("todo-deleted", index)
-        return true;
-      }
-    }
-    return false;
+  deleteToDo(todo: ToDo) {
+    const index = this.todos.indexOf(todo)
+    this.todos.splice(index, 1)
+    pubSub.publish("todo-deleted", index)
   }
 
   delete() {
