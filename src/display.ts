@@ -4,6 +4,7 @@ import { format } from 'date-fns';
 
 const projectContainer = document.createElement("section");
 projectContainer.classList.add("to-do-page");
+let projectInstance = 0;
 
 function addProject(project: Project | Category) {
   // show all tasks on startup
@@ -17,6 +18,10 @@ function addProject(project: Project | Category) {
   const projectList = document.getElementById(`${type}-list`);
   const listElement = document.createElement("li");
   listElement.innerText = project.name;
+  if (type == "project") {
+    listElement.dataset.index = String(projectInstance)
+    projectInstance += 1;
+  }
   listElement.addEventListener("click", () => {
     clearPage()
     renderProject(project)
@@ -155,6 +160,12 @@ function removeToDo(index: Number) {
   if (deletion) projectContainer.removeChild(deletion);
 }
 
+function removeProject(index: Number) {
+  const deletedLI = document.querySelector(`li[data-index="${index}"]`)
+  if (deletedLI) document.getElementById("project-list")?.removeChild(deletedLI)
+}
+
 pubSub.subscribe("todo-deleted", removeToDo)
+pubSub.subscribe("project-deleted", removeProject)
 
 export { addProject }
