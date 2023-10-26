@@ -1,4 +1,6 @@
 // menu-related code in IIFE
+const main = document.querySelector("main");
+const nav = document.querySelector("nav")
 const menuIcon = document.getElementById("menu-icon");
 const menu = document.getElementById("menu");
 
@@ -8,6 +10,15 @@ function toggleMenuIconAndSetMainHeight() {
     menu.classList.add("d-none");
     menu.classList.add("position-absolute")
     menuIcon.classList.remove("d-none")
+
+    // hide menu if user clicks away
+    main.addEventListener('click', function (event) {
+      event.stopPropagation()
+
+      if (!nav.contains(event.target)) {
+        menu.classList.add("d-none")
+      }
+    })
   } else {
     menu.classList.remove("d-none");
     menu.classList.remove("position-absolute")
@@ -17,8 +28,8 @@ function toggleMenuIconAndSetMainHeight() {
   // set main height to remaining VH under header
   const hgroupHeight = document.querySelector("hgroup").offsetHeight;
   const availableHeight = window.innerHeight - (hgroupHeight + 30);
-  document.querySelector("main").style.minHeight = availableHeight + "px";
-  document.querySelector("nav").style.minHeight = availableHeight + "px";
+  main.style.minHeight = `${availableHeight}px`;
+  nav.style.minHeight = `${availableHeight}px`;
 }
 
 // Add an event listener to check screen width when the page loads and on resize

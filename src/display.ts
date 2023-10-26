@@ -17,12 +17,23 @@ function addProject(project: Project | Category) {
   const type = project instanceof Project ? "project" : "category";
   const projectList = document.getElementById(`${type}-list`);
   const listElement = document.createElement("li");
-  listElement.innerText = project.name;
-  if (type == "project") {
+  const listText = document.createElement("p")
+  const toDoCounter = document.createElement("span")
+  toDoCounter.innerText = "0";
+
+  listText.appendChild(toDoCounter)
+  listText.innerHTML += project.name
+  listElement.appendChild(listText)
+
+  if (project instanceof Project) {
+    const icon = document.createElement("i")
+    icon.classList.add("bi-three-dots-vertical")
+    listElement.appendChild(icon)
     listElement.dataset.index = String(projectInstance)
     projectInstance += 1;
   }
-  listElement.addEventListener("click", () => {
+
+  listText.addEventListener("click", () => {
     clearPage()
     renderProject(project)
   })
@@ -149,8 +160,6 @@ function renderToDo(parameters: [toDo: ToDo, index: Number, project: Project | C
 
 }
 
-pubSub.subscribe("todo-added", renderToDo);
-
 function clearPage() {
   projectContainer.innerHTML = ""
 }
@@ -165,6 +174,7 @@ function removeProject(index: Number) {
   if (deletedLI) document.getElementById("project-list")?.removeChild(deletedLI)
 }
 
+pubSub.subscribe("todo-added", renderToDo);
 pubSub.subscribe("todo-deleted", removeToDo)
 pubSub.subscribe("project-deleted", removeProject)
 
