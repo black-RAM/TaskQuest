@@ -1,16 +1,20 @@
-import { Category, Project, ToDo } from "./app";
+import { Category, Project, ToDo, allTasksCategory } from "./app";
 import { pubSub } from "./pubsub";
 import { format } from 'date-fns';
 
 const projectContainer = document.createElement("section");
 projectContainer.classList.add("to-do-page");
-let projectInstance = 0;
+
+function showAllTasks() {
+  clearPage()
+  renderProject(allTasksCategory)
+}
 
 function addProject(project: Project | Category) {
   // show all tasks on startup
   if (project.name === "All Tasks") {
     setTimeout(() => {
-      renderProject(project)
+      showAllTasks()
     }, 10); // 10ms delay to allow all to-dos to initialise
   };
 
@@ -19,24 +23,30 @@ function addProject(project: Project | Category) {
   const listElement = document.createElement("li");
   const listText = document.createElement("p")
   const toDoCounter = document.createElement("span")
-  toDoCounter.innerText = "0";
+  toDoCounter.classList.add("counter")
 
   listText.appendChild(toDoCounter)
   listText.innerHTML += project.name
   listElement.appendChild(listText)
 
   if (project instanceof Project) {
-    const icon = document.createElement("i")
-    icon.classList.add("bi-three-dots-vertical")
-    listElement.appendChild(icon)
-    listElement.dataset.index = String(projectInstance)
-    projectInstance += 1;
+    listElement.dataset.index = String(project.index)
+
+    const deleteButton = document.createElement("button")
+    deleteButton.innerHTML = '<i class="bi bi-trash3 fs-5"></i>';
+    deleteButton.title = "delete project";
+    deleteButton.addEventListener("click", () => {
+      project.delete()
+      showAllTasks()
+    });
+    listElement.appendChild(deleteButton);
   }
 
   listText.addEventListener("click", () => {
     clearPage()
     renderProject(project)
   })
+
   projectList?.appendChild(listElement)
 }
 
@@ -160,6 +170,15 @@ function renderToDo(parameters: [toDo: ToDo, index: Number, project: Project | C
 
 }
 
+function updateToDoCounter(index: Number) {
+  const counter = document.querySelector(`ul#project-list > li[data-index="${index}"] .counter`)
+
+  if (counter) {
+    const currentCount = Number(counter.innerHTML)
+    counter.innerHTML = String(currentCount + 1);
+  }
+}
+
 function clearPage() {
   projectContainer.innerHTML = ""
 }
@@ -175,6 +194,7 @@ function removeProject(index: Number) {
 }
 
 pubSub.subscribe("todo-added", renderToDo);
+pubSub.subscribe("todo-counted", updateToDoCounter)
 pubSub.subscribe("todo-deleted", removeToDo)
 pubSub.subscribe("project-deleted", removeProject)
 

@@ -21,6 +21,7 @@ class ToDo {
 
 class Project {
   todos: ToDo[];
+  index: Number;
 
   constructor(
     public name: string,
@@ -29,10 +30,12 @@ class Project {
   ) {
     this.todos = [];
     projects.push(this);
+    this.index = projects.indexOf(this);
     addProject(this)
 
     this.initialTodos?.forEach(todo => {
       todo.projectName = this.name;
+      pubSub.publish("todo-counted", this.index)
     })
     pubSub.publish("todo-stored", this.initialTodos)
   }
@@ -45,6 +48,7 @@ class Project {
 
     if (!this.initialTodos?.includes(todo)) {
       pubSub.publish("todo-stored", [todo])
+      pubSub.publish("todo-counted", this.index)
     }
   }
 
@@ -99,4 +103,4 @@ const importantCategory = new Category("Important", filterImportant, "bi-star-fi
 const todayCategory = new Category("Today", filterToday, "bi-calendar-event-fill")
 const thisWeekCategory = new Category("This Week", filterThisWeek, "bi-calendar-week-fill")
 
-export { Category, Project, ToDo };
+export { Category, Project, ToDo, allTasksCategory };

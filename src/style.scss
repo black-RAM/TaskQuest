@@ -23,10 +23,6 @@ nav ul {
         min-width: 2ch;
       }
     }
-
-    i {
-      @extend .bi, .fs-5;
-    }
   }
 }
 
@@ -60,9 +56,7 @@ section.to-do-page {
       @extend .form-check-label;
     }
 
-    button {
-      @extend .btn;
-    }
+
 
     dialog.details {
       position: absolute;
@@ -90,4 +84,8 @@ section.to-do-page {
   article.priority-low {
     border-left: 5px solid green;
   }
+}
+
+button {
+  @extend .btn;
 }
