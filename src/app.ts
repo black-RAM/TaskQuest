@@ -1,6 +1,7 @@
 import { filterImportant, filterThisWeek, filterToday, noFilter } from "./filters";
 import { addProject } from "./display";
 import { pubSub } from "./pubsub";
+import "./forms"
 
 type Scale = 1 | 2 | 3;
 
@@ -33,11 +34,14 @@ class Project {
     this.index = projects.indexOf(this);
     addProject(this)
 
-    this.initialTodos?.forEach(todo => {
-      todo.projectName = this.name;
-      pubSub.publish("todo-counted", this.index)
-    })
-    pubSub.publish("todo-stored", this.initialTodos)
+    if (this.initialTodos) {
+      this.initialTodos.forEach(todo => {
+        todo.projectName = this.name;
+        pubSub.publish("todo-counted", this.index)
+      })
+      pubSub.publish("todo-stored", this.initialTodos)
+    }
+
   }
 
   addToDo(todo: ToDo) {

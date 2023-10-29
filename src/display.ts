@@ -66,12 +66,14 @@ function renderProject(project: Project | Category) {
 
   document.getElementsByTagName("main")[0].appendChild(projectContainer);
 
-  if (project instanceof Project && project.initialTodos) {
-    for (const todo of project.initialTodos) {
-      project.addToDo(todo)
-    }
+  if (project instanceof Project) {
+    if (project.initialTodos) {
+      for (const todo of project.initialTodos) {
+        project.addToDo(todo)
+      }
 
-    project.initialTodos = undefined;
+      project.initialTodos = undefined;
+    }
   } else {
     project.todos.forEach((todo, i) => {
       renderToDo([todo, i, project]);
@@ -104,7 +106,6 @@ function renderToDo(parameters: [toDo: ToDo, index: Number, project: Project | C
   checkBox.type = "checkbox";
   checkBox.id = "completeCheck";
   toDoTitle.htmlFor = "completeCheck";
-  dueDateP.classList.add("due-date");
 
   editButton.type = "button";
   deleteButton.type = "button";
@@ -135,7 +136,8 @@ function renderToDo(parameters: [toDo: ToDo, index: Number, project: Project | C
   detailsButton.addEventListener("click", () => {
     // position modal under to-do element
     const buttonPos = detailsButton.getBoundingClientRect()
-    detailsModal.style.top = `${Math.round(buttonPos.top) + 50}px`
+    const scrollY = window.scrollY;
+    detailsModal.style.top = `${Math.ceil(buttonPos.bottom + scrollY) + 10}px`
     detailsModal.showModal()
   })
 
@@ -161,6 +163,12 @@ function renderToDo(parameters: [toDo: ToDo, index: Number, project: Project | C
     deleteButton.addEventListener("click", () => {
       project.deleteToDo(toDo)
     })
+
+    // hide date on small screens
+    if (window.innerWidth < 430) {
+      console.log("small screen for project todo")
+      dueDateP.classList.add("d-none")
+    }
   }
 
   element.appendChild(leftDiv);
