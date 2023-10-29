@@ -20,14 +20,25 @@
   <div class="container-fluid">
     <main class="row">
 
-      <nav class="h-100 col-6 col-sm-4 col-lg-2 p-3 fs-4 lh-lg bg-white" id="menu">
+      <nav class="h-100 col-8 col-sm-4 col-lg-2 p-3 fs-4 lh-lg bg-white" id="menu">
         <h3 class="fs-2">Home</h3>
         <ul id="category-list">
         </ul>
 
-        <h3 class="fs-2">Projects</h3>
+        <h3 class="fs-2 d-flex justify-content-between pe-4">
+          <span>Projects</span>
+          <i class="bi bi-plus-square fs-3" id="add-project-icon"></i>
+        </h3>
         <ul id="project-list">
-        </ul>        
+        </ul>
+
+        <dialog id="project-form-container" class="position-absolute m-0 p-1 fs-5">
+          <form id="add-project-form" method="dialog" class="d-flex align-items-center">
+            <label for="project-name" class="">Project: </label>
+            <input id="project-name" class="form-control m-2" type="text" placeholder="project name" minlength="2" maxlength="8">
+            <button type="submit"><i class="bi bi-folder-plus"></i></button>
+          </form>
+        </dialog>
       </nav>
 
       <!-- section for project page inserted by JS -->
