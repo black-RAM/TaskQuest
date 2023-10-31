@@ -129,6 +129,11 @@ function renderToDo(parameters: [toDo: ToDo, index: Number, project: Project | C
     <p><b>Description:</b> ${toDo.description}</p>
     <p><b>Due Date:</b> ${format(toDo.due, "do MMMM, Y")}</p>`;
 
+  if (toDo.checked) {
+    checkBox.checked = true;
+    element.classList.add("text-decoration-line-through")
+  }
+
   // details button
   detailsButton.addEventListener("click", () => {
     // position modal under to-do element
@@ -142,6 +147,15 @@ function renderToDo(parameters: [toDo: ToDo, index: Number, project: Project | C
     detailsModal.close()
   })
 
+  checkBox.addEventListener("click", () => {
+    toDo.toggleCheck()
+
+    if (toDo.checked) {
+      element.classList.add("text-decoration-line-through")
+    } else {
+      element.classList.remove("text-decoration-line-through")
+    }
+  })
   // finally, appending elements to the DOM
   detailsModal.appendChild(closeDetailsModal)
 

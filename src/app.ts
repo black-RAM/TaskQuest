@@ -8,6 +8,7 @@ type Scale = 1 | 2 | 3;
 class ToDo {
   priority: String;
   projectName: String;
+  checked: Boolean;
 
   constructor(
     public title: string,
@@ -16,7 +17,12 @@ class ToDo {
     public priorityNum: Scale
   ) {
     this.priority = priorityNum === 3 ? "high" : priorityNum === 2 ? "medium" : "low";
+    this.checked = false;
     this.projectName = "";
+  }
+
+  toggleCheck() {
+    this.checked = !this.checked
   }
 }
 
