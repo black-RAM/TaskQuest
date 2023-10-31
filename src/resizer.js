@@ -4,7 +4,7 @@ const nav = document.querySelector("nav")
 const menuIcon = document.getElementById("menu-icon");
 const menu = document.getElementById("menu");
 
-function toggleMenuIconAndSetMainHeight() {
+function sizeAndToggle() {
   // hide menu, show icon on mobile
   if (window.innerWidth < 575) {
     menu.classList.add("d-none");
@@ -27,14 +27,17 @@ function toggleMenuIconAndSetMainHeight() {
 
   // set main height to remaining VH under header
   const hgroupHeight = document.querySelector("hgroup").offsetHeight;
-  const availableHeight = window.innerHeight - (hgroupHeight + 30);
-  main.style.minHeight = `${availableHeight}px`;
-  nav.style.minHeight = `${availableHeight}px`;
+  const availableHeight = window.innerHeight - (hgroupHeight + 32);
+  nav.style.maxHeight = `${availableHeight}px`;
+  setTimeout(() => {
+    const page = document.getElementsByTagName("section")[0];
+    page.style.maxHeight = `${availableHeight}px`;
+  }, 100); // 100ms delay so section can first be rendered
 }
 
 // Add an event listener to check screen width when the page loads and on resize
-window.addEventListener('load', toggleMenuIconAndSetMainHeight);
-window.addEventListener('resize', toggleMenuIconAndSetMainHeight);
+window.addEventListener('load', sizeAndToggle);
+window.addEventListener('resize', sizeAndToggle);
 
 // show/collapse menu when icon clicked
 menuIcon.addEventListener('click', () => {
