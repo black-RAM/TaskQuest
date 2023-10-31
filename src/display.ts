@@ -66,14 +66,11 @@ function renderProject(project: Project | Category) {
 
   document.getElementsByTagName("main")[0].appendChild(projectContainer);
 
-  if (project instanceof Project) {
-    if (project.initialTodos) {
-      for (const todo of project.initialTodos) {
-        project.addToDo(todo)
-      }
-
-      project.initialTodos = undefined;
+  if (project instanceof Project && project.initialTodos) {
+    for (const todo of project.initialTodos) {
+      project.addToDo(todo)
     }
+    project.initialTodos = undefined;
   } else {
     project.todos.forEach((todo, i) => {
       renderToDo([todo, i, project]);
