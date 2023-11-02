@@ -85,7 +85,27 @@ section.to-do-page {
   }
 
   // add to-do form
+  dialog.add-to-do-form {
+    div {
+      @extend .mb-3;
+    }
 
+    input {
+      @extend .form-control;
+    }
+
+    .submit-group {
+      @extend .d-flex, .justify-content-between;
+
+      button[type="submit"] {
+        @extend .bg-success;
+      }
+
+      button:last-child {
+        @extend .bg-danger;
+      }
+    }
+  }
 }
 
 button {

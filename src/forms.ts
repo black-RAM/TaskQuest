@@ -53,7 +53,7 @@ function addToDoForm(project: Project, container: HTMLElement, coordinates: DOMR
   titleText.innerText = "Title: "
   detailsText.innerText = "Details: "
   dateText.innerText = "Date: "
-  priorityText.innerText = "Priority (scale of 1-3): "
+  priorityText.innerText = "Priority: "
   submit.innerText = "Add"
   cancel.innerText = "Cancel"
 
@@ -79,7 +79,7 @@ function addToDoForm(project: Project, container: HTMLElement, coordinates: DOMR
   priorityInput.max = "3"
 
   submit.type = "submit"
-
+  submitGroup.classList.add("submit-group")
   // adding to DOM
   titleGroup.appendChild(titleText)
   titleGroup.appendChild(titleInput)
