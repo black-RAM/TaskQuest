@@ -28,6 +28,8 @@ function addProjectForm() {
 addProjectForm()
 
 function addToDoForm(project: Project, container: HTMLElement, coordinates: DOMRect) {
+  if (document.getElementsByClassName("add-to-do-form")[0]) return // prevent duplicates
+
   // HTML element creation
   const modal = document.createElement("dialog")
   const form = document.createElement("form")
@@ -56,6 +58,7 @@ function addToDoForm(project: Project, container: HTMLElement, coordinates: DOMR
   cancel.innerText = "Cancel"
 
   // attributes
+  modal.classList.add("add-to-do-form")
   form.method = "dialog"
 
   titleInput.required = true
@@ -111,12 +114,12 @@ function addToDoForm(project: Project, container: HTMLElement, coordinates: DOMR
   submit.addEventListener("click", () => {
     const newToDo = new ToDo(titleInput.value, detailsInput.value, new Date(dateInput.value), +priorityInput.value)
     project.addToDo(newToDo)
-    modal.close()
+    container.removeChild(modal)
   })
 
   // simply close form on cancel
   cancel.addEventListener("click", () => {
-    modal.close()
+    container.removeChild(modal)
   })
 }
 
