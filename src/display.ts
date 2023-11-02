@@ -71,7 +71,7 @@ function renderProject(project: Project | Category) {
 
   if (project instanceof Project) {
     addIcon.addEventListener("click", () => {
-      addToDoForm(project, projectContainer)
+      addToDoForm(project, projectContainer, heading.getBoundingClientRect())
     })
     heading.appendChild(addIcon)
   }
@@ -190,8 +190,7 @@ function renderToDo(parameters: [toDo: ToDo, index: Number, project: Project | C
     })
 
     // hide date on small screens
-    if (window.innerWidth < 430) {
-      console.log("small screen for project todo")
+    if (projectContainer.clientWidth < 400) {
       dueDateP.classList.add("d-none")
     }
   }

@@ -13,7 +13,7 @@ class ToDo {
     public due: Date,
     public priorityNum: Number
   ) {
-    this.priority = priorityNum === 3 ? "high" : priorityNum === 2 ? "medium" : priorityNum == 3 ? "low" : ""
+    this.priority = priorityNum === 3 ? "high" : priorityNum === 2 ? "medium" : priorityNum === 1 ? "low" : ""
     this.checked = false;
     this.projectName = "";
   }

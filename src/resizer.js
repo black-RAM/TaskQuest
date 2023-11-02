@@ -28,10 +28,11 @@ function sizeAndToggle() {
   // set main height to remaining VH under header
   const hgroupHeight = document.querySelector("hgroup").offsetHeight;
   const availableHeight = window.innerHeight - (hgroupHeight + 32);
-  nav.style.maxHeight = `${availableHeight}px`;
+  nav.style.height = `${availableHeight}px`;
+  nav.style.maxHeight = nav.style.height
   setTimeout(() => {
     const page = document.getElementsByTagName("section")[0];
-    page.style.maxHeight = `${availableHeight}px`;
+    page.style.height = `${availableHeight}px`;
   }, 100); // 100ms delay so section can first be rendered
 }
 

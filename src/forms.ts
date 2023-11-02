@@ -27,7 +27,7 @@ function addProjectForm() {
 
 addProjectForm()
 
-function addToDoForm(project: Project, container: HTMLElement) {
+function addToDoForm(project: Project, container: HTMLElement, coordinates: DOMRect) {
   // HTML element creation
   const modal = document.createElement("dialog")
   const form = document.createElement("form")
@@ -44,15 +44,16 @@ function addToDoForm(project: Project, container: HTMLElement) {
   const priorityText = document.createElement("label")
   const priorityInput = document.createElement("input")
   const submitGroup = document.createElement("div")
-
   const submit = document.createElement("button")
+  const cancel = document.createElement("button")
 
-  // content
+  // text content
   titleText.innerText = "Title: "
   detailsText.innerText = "Details: "
   dateText.innerText = "Date: "
   priorityText.innerText = "Priority (scale of 1-3): "
   submit.innerText = "Add"
+  cancel.innerText = "Cancel"
 
   // attributes
   form.method = "dialog"
@@ -90,6 +91,7 @@ function addToDoForm(project: Project, container: HTMLElement) {
   priorityGroup.appendChild(priorityInput)
 
   submitGroup.appendChild(submit)
+  submitGroup.appendChild(cancel)
 
   modal.appendChild(titleGroup)
   modal.appendChild(detailsGroup)
@@ -100,12 +102,20 @@ function addToDoForm(project: Project, container: HTMLElement) {
   container.appendChild(modal)
 
   // position modal
+  modal.style.top = `${coordinates.bottom}px`
+  modal.style.left = `${coordinates.left}px`
+  modal.style.right = '1.5rem'
   modal.show()
 
   // create ToDo from user input
   submit.addEventListener("click", () => {
     const newToDo = new ToDo(titleInput.value, detailsInput.value, new Date(dateInput.value), +priorityInput.value)
     project.addToDo(newToDo)
+    modal.close()
+  })
+
+  // simply close form on cancel
+  cancel.addEventListener("click", () => {
     modal.close()
   })
 }
