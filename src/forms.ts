@@ -58,7 +58,7 @@ function addToDoForm(project: Project, container: HTMLElement, coordinates: DOMR
   cancel.innerText = "Cancel"
 
   // attributes
-  modal.classList.add("add-to-do-form")
+  form.classList.add("add-to-do-form")
   form.method = "dialog"
 
   titleInput.required = true
@@ -96,12 +96,13 @@ function addToDoForm(project: Project, container: HTMLElement, coordinates: DOMR
   submitGroup.appendChild(submit)
   submitGroup.appendChild(cancel)
 
-  modal.appendChild(titleGroup)
-  modal.appendChild(detailsGroup)
-  modal.appendChild(dateGroup)
-  modal.appendChild(priorityGroup)
-  modal.appendChild(submitGroup)
+  form.appendChild(titleGroup)
+  form.appendChild(detailsGroup)
+  form.appendChild(dateGroup)
+  form.appendChild(priorityGroup)
+  form.appendChild(submitGroup)
 
+  modal.appendChild(form)
   container.appendChild(modal)
 
   // position modal

@@ -85,9 +85,9 @@ section.to-do-page {
   }
 
   // add to-do form
-  dialog.add-to-do-form {
+  form.add-to-do-form {
     div {
-      @extend .mb-3;
+      @extend .d-flex, .align-items-center, .gap-3, .mb-3;
     }
 
     input {
@@ -95,7 +95,7 @@ section.to-do-page {
     }
 
     .submit-group {
-      @extend .d-flex, .justify-content-between;
+      @extend .d-flex, .justify-content-center;
 
       button[type="submit"] {
         @extend .bg-success;
