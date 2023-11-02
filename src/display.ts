@@ -1,6 +1,7 @@
 import { Category, Project, ToDo, allTasksCategory } from "./app";
 import { pubSub } from "./pubsub";
 import { format } from 'date-fns';
+import { addToDoForm } from "./forms";
 
 const projectContainer = document.createElement("section");
 projectContainer.classList.add("to-do-page");
@@ -53,14 +54,27 @@ function addProject(project: Project | Category) {
 function renderProject(project: Project | Category) {
 
   const heading = document.createElement("header");
+  const titleDiv = document.createElement("div");
   const title = document.createElement("h2");
-  title.innerText = project.name;
   const icon = document.createElement("i");
+  const addIcon = document.createElement("i")
+  title.innerText = project.name;
+  title.classList.add("h1")
   icon.classList.add("bi");
+  addIcon.classList.add("bi")
   icon.classList.add(`${project.icon}`);
+  addIcon.classList.add("bi-journal-plus")
 
-  heading.appendChild(icon)
-  heading.appendChild(title)
+  titleDiv.appendChild(icon)
+  titleDiv.appendChild(title)
+  heading.appendChild(titleDiv)
+
+  if (project instanceof Project) {
+    addIcon.addEventListener("click", () => {
+      addToDoForm(project, projectContainer)
+    })
+    heading.appendChild(addIcon)
+  }
 
   projectContainer.appendChild(heading)
 

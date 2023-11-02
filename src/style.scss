@@ -30,10 +30,10 @@ section.to-do-page {
   @extend .col-12, .col-sm-7, .col-lg-9, .bg-body-secondary, .overflow-y-scroll, .p-4;
 
   header {
-    @extend .fs-2, .mb-3, .bg-success-subtle, .p-3, .d-flex, .align-items-center, .gap-4;
+    @extend .fs-2, .mb-3, .bg-success-subtle, .p-3, .d-flex, .justify-content-between;
 
-    h2 {
-      @extend .h1;
+    >div {
+      @extend .d-flex, .gap-4, .align-items-center;
     }
   }
 
@@ -83,6 +83,9 @@ section.to-do-page {
   article.priority-low {
     border-left: 5px solid green;
   }
+
+  // add to-do form
+
 }
 
 button {

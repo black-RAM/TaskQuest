@@ -1,9 +1,6 @@
 import { filterImportant, filterThisWeek, filterToday, noFilter } from "./filters";
 import { addProject } from "./display";
 import { pubSub } from "./pubsub";
-import "./forms"
-
-type Scale = 1 | 2 | 3;
 
 class ToDo {
   priority: String;
@@ -14,9 +11,9 @@ class ToDo {
     public title: string,
     public description: string,
     public due: Date,
-    public priorityNum: Scale
+    public priorityNum: Number
   ) {
-    this.priority = priorityNum === 3 ? "high" : priorityNum === 2 ? "medium" : "low";
+    this.priority = priorityNum === 3 ? "high" : priorityNum === 2 ? "medium" : priorityNum == 3 ? "low" : ""
     this.checked = false;
     this.projectName = "";
   }

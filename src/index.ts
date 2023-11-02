@@ -15,11 +15,11 @@ const chill = new Project("Chill", [
 ], "bi-tv-fill")
 
 const homework = new Project("Homework", [
-  new ToDo("Web Authoring", "Try and hand it in", new Date(2023, 9, 31), 3),
+  new ToDo("Math Revision", "Ex. 11.13, revise quadratic equation and quadratic formula", new Date(2023, 10, 2), 3),
+  new ToDo("English Coursework", "My most prized possesion", new Date(2023, 10, 1), 1),
+  new ToDo("History Arguement", "Bring up mark scheme issue", new Date(2023, 10, 1), 3),
   new ToDo("Literature", "Read Act IV and do the activity", new Date(2023, 10, 7), 1),
+  new ToDo("History 1", "Some two essays...", new Date(2023, 10, 7), 1),
+  new ToDo("History 2", "Work on google classroom", new Date(2023, 10, 13), 1),
   new ToDo("Bible", "Read Joshua and do the weekly readings", new Date(2023, 10, 30), 1),
-  new ToDo("Geography", "Notes about case studies of rivers", new Date(2023, 9, 31), 3),
-  new ToDo("Business Studies", "Notes on chapter 5", new Date(2023, 10, 1), 3),
-  new ToDo("French", "Revise French", new Date(2023, 10, 1), 1),
-  new ToDo("Chemistry", "Practice Chemical calculations", new Date(2023, 10, 2), 1)
 ])
