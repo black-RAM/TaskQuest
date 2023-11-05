@@ -3,7 +3,6 @@ import { addProject } from "./display";
 import { pubSub } from "./pubsub";
 
 class ToDo {
-  priority: String;
   projectName: String;
   checked: Boolean;
 
@@ -13,13 +12,32 @@ class ToDo {
     public due: Date,
     public priorityNum: Number
   ) {
-    this.priority = priorityNum === 3 ? "high" : priorityNum === 2 ? "medium" : priorityNum === 1 ? "low" : ""
     this.checked = false;
     this.projectName = "";
   }
 
   toggleCheck() {
     this.checked = !this.checked
+  }
+
+  getPriorityWord() {
+    return this.priorityNum === 3 ? "high" : this.priorityNum === 2 ? "medium" : this.priorityNum === 1 ? "low" : "";
+  }
+
+  setTitle(newTitle: string) {
+    this.title = newTitle
+  }
+
+  setDetails(newDetails: string) {
+    this.description = newDetails
+  }
+
+  setDate(newDate: Date) {
+    this.due = newDate
+  }
+
+  setPriority(newPriority: number) {
+    this.priorityNum = newPriority
   }
 }
 

@@ -57,17 +57,17 @@ section.to-do-page {
     }
 
 
-    dialog.details {
+    dialog {
       position: absolute;
-      left: calc(100vw - 300px - 1.5rem);
+      left: calc(100vw - 300px - 1.5rem) !important;
       right: 1.5rem;
       width: 300px;
+    }
 
-      button {
-        position: absolute;
-        top: 0;
-        right: 0;
-      }
+    dialog.details button {
+      position: absolute;
+      top: 0;
+      right: 0;
     }
   }
 
@@ -85,7 +85,7 @@ section.to-do-page {
   }
 
   // add to-do form
-  form.add-to-do-form {
+  form.to-do-form {
     div {
       @extend .d-flex, .align-items-center, .gap-3, .mb-3;
     }

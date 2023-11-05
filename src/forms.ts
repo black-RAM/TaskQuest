@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import { Project, ToDo } from "./app";
 
 function addProjectForm() {
@@ -36,8 +37,8 @@ function addProjectForm() {
 
 addProjectForm()
 
-function addToDoForm(project: Project, container: HTMLElement, coordinates: DOMRect) {
-  if (document.getElementsByClassName("add-to-do-form")[0]) return // prevent duplicates
+function toDoForm(container: HTMLElement, position: DOMRect, formAction: FormActionFunction) {
+  if (document.getElementsByClassName("to-do-form")[0]) return // prevent duplicates
 
   // HTML element creation
   const modal = document.createElement("dialog")
@@ -67,7 +68,7 @@ function addToDoForm(project: Project, container: HTMLElement, coordinates: DOMR
   cancel.innerText = "Cancel"
 
   // attributes
-  form.classList.add("add-to-do-form")
+  form.classList.add("to-do-form")
   form.method = "dialog"
 
   titleInput.required = true
@@ -89,6 +90,17 @@ function addToDoForm(project: Project, container: HTMLElement, coordinates: DOMR
 
   submit.type = "submit"
   submitGroup.classList.add("submit-group")
+
+  // simply close form on cancel
+  cancel.addEventListener("click", () => {
+    container.removeChild(modal)
+  })
+
+  // run necessary action when submitted
+  form.addEventListener("submit", () => {
+    formAction(titleInput.value, detailsInput.value, dateInput.value, +priorityInput.value)
+  })
+
   // adding to DOM
   titleGroup.appendChild(titleText)
   titleGroup.appendChild(titleInput)
@@ -115,22 +127,49 @@ function addToDoForm(project: Project, container: HTMLElement, coordinates: DOMR
   container.appendChild(modal)
 
   // position modal
-  modal.style.top = `${coordinates.bottom}px`
-  modal.style.left = `${coordinates.left}px`
+  modal.style.top = `${position.bottom + 10}px`
+  modal.style.left = `${position.left}px`
   modal.style.right = '1.5rem'
-  modal.show()
+  modal.classList.add("mt-0")
+  modal.showModal()
 
-  // create ToDo from user input
-  submit.addEventListener("click", () => {
-    const newToDo = new ToDo(titleInput.value, detailsInput.value, new Date(dateInput.value), +priorityInput.value)
-    project.addToDo(newToDo)
-    container.removeChild(modal)
-  })
-
-  // simply close form on cancel
-  cancel.addEventListener("click", () => {
-    container.removeChild(modal)
-  })
+  return { titleInput, detailsInput, dateInput, priorityInput, submit }
 }
 
-export { addToDoForm }
+function addToDoForm(project: Project, container: HTMLElement, coordinates: DOMRect) {
+
+  // create ToDo from user input
+  function createToDo(title: string, details: string, dateString: string, priority: number) {
+    const newToDo = new ToDo(title, details, new Date(dateString), priority)
+    project.addToDo(newToDo)
+  }
+
+  // hand over creation of form to lower-level function toDoForm()
+  toDoForm(container, coordinates, createToDo)
+}
+
+function editToDoForm(toDo: ToDo, container: HTMLElement, coordinates: DOMRect) {
+  const elements = toDoForm(container, coordinates, editDetails)
+
+  // include the text of previous todo details
+  if (elements) {
+    elements.titleInput.value = toDo.title
+    elements.detailsInput.value = toDo.description
+    elements.dateInput.value = format(toDo.due, "yyyy-MM-dd")
+    elements.priorityInput.value = String(toDo.priorityNum)
+    elements.submit.innerText = "Edit"
+  }
+
+  function editDetails(title: string, details: string, dateString: string, priority: number) {
+    toDo.setTitle(title)
+    toDo.setDetails(details)
+    toDo.setDate(new Date(dateString))
+    toDo.setPriority(priority)
+  }
+}
+
+interface FormActionFunction {
+  (title: string, details: string, dateString: string, priority: number): void;
+}
+
+export { addToDoForm, editToDoForm }

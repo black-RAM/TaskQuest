@@ -1,7 +1,7 @@
 import { Category, Project, ToDo, allTasksCategory } from "./app";
 import { pubSub } from "./pubsub";
 import { format } from 'date-fns';
-import { addToDoForm } from "./forms";
+import { addToDoForm, editToDoForm } from "./forms";
 
 const projectContainer = document.createElement("section");
 projectContainer.classList.add("to-do-page");
@@ -113,7 +113,7 @@ function renderToDo(parameters: [toDo: ToDo, index: Number, project: Project | C
   const closeDetailsModal = document.createElement("button");
 
   // attributes
-  element.classList.add(`priority-${toDo.priority}`);
+  element.classList.add(`priority-${toDo.getPriorityWord()}`);
   checkBox.type = "checkbox";
   checkBox.id = "completeCheck";
   toDoTitle.htmlFor = "completeCheck";
@@ -140,7 +140,7 @@ function renderToDo(parameters: [toDo: ToDo, index: Number, project: Project | C
   detailsModal.innerHTML =
     `<h3>${toDo.title}</h3>
     <p><b>Project:</b> ${toDo.projectName}</p>
-    <p><b>Priority:</b> ${toDo.priority}</p>
+    <p><b>Priority:</b> ${toDo.getPriorityWord()}</p>
     <p><b>Description:</b> ${toDo.description}</p>
     <p><b>Due Date:</b> ${format(toDo.due, "do MMMM, Y")}</p>`;
 
@@ -155,13 +155,14 @@ function renderToDo(parameters: [toDo: ToDo, index: Number, project: Project | C
     const buttonPos = detailsButton.getBoundingClientRect()
     const scrollY = window.scrollY;
     detailsModal.style.top = `${Math.ceil(buttonPos.bottom + scrollY) + 10}px`
-    detailsModal.showModal()
+    detailsModal.show()
   })
 
   closeDetailsModal.addEventListener("click", () => {
     detailsModal.close()
   })
 
+  // checkbox functionality
   checkBox.addEventListener("click", () => {
     toDo.toggleCheck()
 
@@ -182,18 +183,24 @@ function renderToDo(parameters: [toDo: ToDo, index: Number, project: Project | C
   rightDiv.appendChild(detailsModal)
 
   if (isProject) {
-    rightDiv.appendChild(editButton)
-    rightDiv.appendChild(deleteButton)
-    element.dataset.index = String(index);
+    // hide date on small screens
+    if (projectContainer.clientWidth < 400) {
+      dueDateT.classList.add("d-none")
+    }
+
+    // edit button
+    editButton.addEventListener("click", () => {
+      editToDoForm(toDo, element, detailsButton.getBoundingClientRect())
+    })
+
     // delete button
     deleteButton.addEventListener("click", () => {
       project.deleteToDo(toDo)
     })
 
-    // hide date on small screens
-    if (projectContainer.clientWidth < 400) {
-      dueDateT.classList.add("d-none")
-    }
+    rightDiv.appendChild(editButton)
+    rightDiv.appendChild(deleteButton)
+    element.dataset.index = String(index);
   }
 
   element.appendChild(leftDiv);
