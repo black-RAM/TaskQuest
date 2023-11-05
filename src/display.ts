@@ -105,7 +105,7 @@ function renderToDo(parameters: [toDo: ToDo, index: Number, project: Project | C
   const rightDiv = document.createElement("div");
   const checkBox = document.createElement("input");
   const toDoTitle = document.createElement("label");
-  const dueDateP = document.createElement("p");
+  const dueDateT = document.createElement("time");
   const detailsButton = document.createElement("button");
   const editButton = document.createElement("button");
   const deleteButton = document.createElement("button");
@@ -131,7 +131,8 @@ function renderToDo(parameters: [toDo: ToDo, index: Number, project: Project | C
 
   // content
   toDoTitle.innerText = toDo.title;
-  dueDateP.innerText = format(toDo.due, "d LLL");
+  dueDateT.dateTime = String(toDo.due)
+  dueDateT.innerText = format(toDo.due, "d LLL");
   detailsButton.innerText = "Details";
   editButton.innerHTML = '<i class="bi bi-pencil-square"></i>';
   deleteButton.innerHTML = '<i class="bi bi-trash"></i>';
@@ -176,7 +177,7 @@ function renderToDo(parameters: [toDo: ToDo, index: Number, project: Project | C
   leftDiv.appendChild(checkBox)
   leftDiv.appendChild(toDoTitle)
 
-  rightDiv.appendChild(dueDateP)
+  rightDiv.appendChild(dueDateT)
   rightDiv.appendChild(detailsButton)
   rightDiv.appendChild(detailsModal)
 
@@ -191,7 +192,7 @@ function renderToDo(parameters: [toDo: ToDo, index: Number, project: Project | C
 
     // hide date on small screens
     if (projectContainer.clientWidth < 400) {
-      dueDateP.classList.add("d-none")
+      dueDateT.classList.add("d-none")
     }
   }
 
