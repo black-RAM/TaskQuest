@@ -23,6 +23,15 @@ function addProjectForm() {
   if (form instanceof HTMLFormElement) form.addEventListener("submit", () => {
     if (nameField instanceof HTMLInputElement) new Project(nameField.value)
   })
+
+  // close modal if user clicks away
+  document.body.addEventListener("click", function (event) {
+    if (modal instanceof HTMLDialogElement && event.target instanceof Node) {
+      if (!(modal.contains(event.target) || icon?.contains(event.target))) {
+        modal.close()
+      }
+    }
+  })
 }
 
 addProjectForm()
