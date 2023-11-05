@@ -161,10 +161,7 @@ function editToDoForm(toDo: ToDo, container: HTMLElement, coordinates: DOMRect) 
   }
 
   function editDetails(title: string, details: string, dateString: string, priority: number) {
-    toDo.setTitle(title)
-    toDo.setDetails(details)
-    toDo.setDate(new Date(dateString))
-    toDo.setPriority(priority)
+    toDo.updateProperties(title, details, new Date(dateString), priority)
   }
 }
 

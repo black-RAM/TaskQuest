@@ -12,6 +12,9 @@ function showAllTasks() {
 }
 
 function addProject(project: Project | Category) {
+  // ignore bogus orphan project
+  if (project.name === "Orphan") return
+
   // show all tasks on startup
   if (project.name === "All Tasks") {
     setTimeout(() => {
@@ -87,17 +90,18 @@ function renderProject(project: Project | Category) {
     project.initialTodos = undefined;
   } else {
     project.todos.forEach((todo, i) => {
-      renderToDo([todo, i, project]);
+      renderToDo([todo, i, project, true]);
     });
   }
 }
 
-function renderToDo(parameters: [toDo: ToDo, index: Number, project: Project | Category]) {
+function renderToDo(parameters: [toDo: ToDo, index: Number, project: Project | Category, external: Boolean]) {
   // spread parameters of tuple
   const toDo = parameters[0];
   const index = parameters[1];
   const project = parameters[2]
   const isProject = project instanceof Project;
+  const externalCall = parameters[3]
 
   // HTML elements for to-do article
   const element = document.createElement("article");
@@ -139,7 +143,7 @@ function renderToDo(parameters: [toDo: ToDo, index: Number, project: Project | C
   closeDetailsModal.innerHTML = '<i class="bi bi-x-square"></i>'
   detailsModal.innerHTML =
     `<h3>${toDo.title}</h3>
-    <p><b>Project:</b> ${toDo.projectName}</p>
+    <p><b>Project:</b> ${toDo.getProjectName()}</p>
     <p><b>Priority:</b> ${toDo.getPriorityWord()}</p>
     <p><b>Description:</b> ${toDo.description}</p>
     <p><b>Due Date:</b> ${format(toDo.due, "do MMMM, Y")}</p>`;
@@ -206,8 +210,23 @@ function renderToDo(parameters: [toDo: ToDo, index: Number, project: Project | C
   element.appendChild(leftDiv);
   element.appendChild(rightDiv);
 
-  projectContainer.appendChild(element);
+  if (externalCall) {
+    projectContainer.appendChild(element);
+  } else {
+    return element
+  }
+}
 
+function updateEditedToDo(parameters: [toDo: ToDo, index: number, project: Project | Category]) {
+  const index = parameters[1]
+  const newRender = renderToDo([...parameters, false])
+  const oldRender = document.querySelector(`article[data-index="${index}"]`)
+  const sister = document.querySelector(`article[data-index="${index + 1}"]`)
+
+  if (newRender && oldRender) {
+    projectContainer.insertBefore(newRender, sister)
+    projectContainer.removeChild(oldRender)
+  }
 }
 
 function updateToDoCounter(index: Number) {
@@ -234,6 +253,7 @@ function removeProject(index: Number) {
 }
 
 pubSub.subscribe("todo-added", renderToDo);
+pubSub.subscribe("todo-updated", updateEditedToDo)
 pubSub.subscribe("todo-counted", updateToDoCounter)
 pubSub.subscribe("todo-deleted", removeToDo)
 pubSub.subscribe("project-deleted", removeProject)

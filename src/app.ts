@@ -3,8 +3,9 @@ import { addProject } from "./display";
 import { pubSub } from "./pubsub";
 
 class ToDo {
-  projectName: String;
+  parent: Project;
   checked: Boolean;
+  index: Number;
 
   constructor(
     public title: string,
@@ -12,8 +13,9 @@ class ToDo {
     public due: Date,
     public priorityNum: Number
   ) {
+    this.parent = orphan
     this.checked = false;
-    this.projectName = "";
+    this.index = -1
   }
 
   toggleCheck() {
@@ -24,20 +26,16 @@ class ToDo {
     return this.priorityNum === 3 ? "high" : this.priorityNum === 2 ? "medium" : this.priorityNum === 1 ? "low" : "";
   }
 
-  setTitle(newTitle: string) {
+  getProjectName() {
+    return this.parent.name
+  }
+
+  updateProperties(newTitle: string, newDetails: string, newDate: Date, newPriority: number) {
     this.title = newTitle
-  }
-
-  setDetails(newDetails: string) {
     this.description = newDetails
-  }
-
-  setDate(newDate: Date) {
     this.due = newDate
-  }
-
-  setPriority(newPriority: number) {
     this.priorityNum = newPriority
+    pubSub.publish("todo-updated", [this, this.index, this.parent])
   }
 }
 
@@ -57,7 +55,7 @@ class Project {
 
     if (this.initialTodos) {
       this.initialTodos.forEach(todo => {
-        todo.projectName = this.name;
+        todo.parent = this;
         pubSub.publish("todo-counted", this.index)
       })
       pubSub.publish("todo-stored", this.initialTodos)
@@ -66,10 +64,10 @@ class Project {
   }
 
   addToDo(todo: ToDo) {
-    const index = this.todos.length;
-    todo.projectName = this.name;
+    todo.index = this.todos.length;
+    todo.parent = this;
     this.todos.push(todo);
-    pubSub.publish("todo-added", [todo, index, this]);
+    pubSub.publish("todo-added", [todo, todo.index, this, true]);
 
     if (!this.initialTodos?.includes(todo)) {
       pubSub.publish("todo-stored", [todo])
@@ -118,7 +116,7 @@ class Category {
   }
 
   removeProject(deletion: Project) {
-    this.todos = this.todos.filter(todo => todo.projectName !== deletion.name)
+    this.todos = this.todos.filter(todo => todo.parent !== deletion)
   }
 }
 
@@ -127,5 +125,8 @@ const allTasksCategory = new Category("All Tasks", noFilter, "bi-calendar-check-
 const importantCategory = new Category("Important", filterImportant, "bi-star-fill")
 const todayCategory = new Category("Today", filterToday, "bi-calendar-event-fill")
 const thisWeekCategory = new Category("This Week", filterThisWeek, "bi-calendar-week-fill")
+
+// bogus project for todos without assigned parent property
+const orphan = new Project("Orphan")
 
 export { Category, Project, ToDo, allTasksCategory };
