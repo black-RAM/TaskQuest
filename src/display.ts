@@ -1,10 +1,16 @@
 import { Category, Project, ToDo, allTasksCategory } from "./app";
+import { addToDoForm, editToDoForm } from "./forms";
 import { pubSub } from "./pubsub";
 import { format } from 'date-fns';
-import { addToDoForm, editToDoForm } from "./forms";
+import "./style.scss";
+import "./resizer.js";
 
 const projectContainer = document.createElement("section");
 projectContainer.classList.add("to-do-page");
+
+function refresh(data: Project[]) {
+  console.dir(data)
+}
 
 function showAllTasks() {
   clearPage()
@@ -87,20 +93,19 @@ function renderProject(project: Project | Category) {
     for (const todo of project.initialTodos) {
       project.addToDo(todo)
     }
-    project.initialTodos = undefined;
+    delete project.initialTodos
   } else {
     project.todos.forEach((todo, i) => {
-      renderToDo([todo, i, project, true]);
+      renderToDo([todo, i, project instanceof Project, true]);
     });
   }
 }
 
-function renderToDo(parameters: [toDo: ToDo, index: Number, project: Project | Category, external: Boolean]) {
+function renderToDo(parameters: [toDo: ToDo, index: Number, isProject: Boolean, external: Boolean]) {
   // spread parameters of tuple
   const toDo = parameters[0];
   const index = parameters[1];
-  const project = parameters[2]
-  const isProject = project instanceof Project;
+  const isProject = parameters[2]
   const externalCall = parameters[3]
 
   // HTML elements for to-do article
@@ -143,7 +148,7 @@ function renderToDo(parameters: [toDo: ToDo, index: Number, project: Project | C
   closeDetailsModal.innerHTML = '<i class="bi bi-x-square"></i>'
   detailsModal.innerHTML =
     `<h3>${toDo.title}</h3>
-    <p><b>Project:</b> ${toDo.getProjectName()}</p>
+    <p><b>Project:</b> ${toDo.parent}</p>
     <p><b>Priority:</b> ${toDo.getPriorityWord()}</p>
     <p><b>Description:</b> ${toDo.description}</p>
     <p><b>Due Date:</b> ${format(toDo.due, "do MMMM, Y")}</p>`;
@@ -199,7 +204,13 @@ function renderToDo(parameters: [toDo: ToDo, index: Number, project: Project | C
 
     // delete button
     deleteButton.addEventListener("click", () => {
-      project.deleteToDo(toDo)
+      pubSub.publish(`deletion-in-${toDo.parent}`, toDo)
+
+      // IMPORTANT INFORMATION:
+      // cannot call project.method directly
+      // because every todo would need a property refering to the parent project
+      // and JSON.stringify would fail to serialise that circular reference
+      // so it will crash app, and storage would be impossible
     })
 
     rightDiv.appendChild(editButton)
@@ -217,9 +228,9 @@ function renderToDo(parameters: [toDo: ToDo, index: Number, project: Project | C
   }
 }
 
-function updateEditedToDo(parameters: [toDo: ToDo, index: number, project: Project | Category]) {
+function updateEditedToDo(parameters: [toDo: ToDo, index: number]) {
   const index = parameters[1]
-  const newRender = renderToDo([...parameters, false])
+  const newRender = renderToDo([...parameters, true, false])
   const oldRender = document.querySelector(`article[data-index="${index}"]`)
   const sister = document.querySelector(`article[data-index="${index + 1}"]`)
 
@@ -258,4 +269,4 @@ pubSub.subscribe("todo-counted", updateToDoCounter)
 pubSub.subscribe("todo-deleted", removeToDo)
 pubSub.subscribe("project-deleted", removeProject)
 
-export { addProject }
+export { refresh, addProject }

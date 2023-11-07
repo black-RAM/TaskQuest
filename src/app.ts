@@ -1,11 +1,14 @@
+import { clearVisitedCookie, hasVisited, populateInitialProjects, retrieveData, setVisitedCookie } from "./storage"
 import { filterImportant, filterThisWeek, filterToday, noFilter } from "./filters";
-import { addProject } from "./display";
+import { addProject, refresh } from "./display";
 import { pubSub } from "./pubsub";
 
+let projects: Project[] = [];
+
 class ToDo {
-  parent: Project;
   checked: Boolean;
   index: Number;
+  parent: string;
 
   constructor(
     public title: string,
@@ -13,21 +16,18 @@ class ToDo {
     public due: Date,
     public priorityNum: Number
   ) {
-    this.parent = orphan
-    this.checked = false;
+    this.parent = "orphan"
+    this.checked = false
     this.index = -1
   }
 
   toggleCheck() {
     this.checked = !this.checked
+    pubSub.publish("data-change", projects)
   }
 
   getPriorityWord() {
     return this.priorityNum === 3 ? "high" : this.priorityNum === 2 ? "medium" : this.priorityNum === 1 ? "low" : "";
-  }
-
-  getProjectName() {
-    return this.parent.name
   }
 
   updateProperties(newTitle: string, newDetails: string, newDate: Date, newPriority: number) {
@@ -35,7 +35,8 @@ class ToDo {
     this.description = newDetails
     this.due = newDate
     this.priorityNum = newPriority
-    pubSub.publish("todo-updated", [this, this.index, this.parent])
+    pubSub.publish("todo-updated", [this, this.index])
+    pubSub.publish("data-change", projects)
   }
 }
 
@@ -55,24 +56,29 @@ class Project {
 
     if (this.initialTodos) {
       this.initialTodos.forEach(todo => {
-        todo.parent = this;
+        todo.parent = this.name;
         pubSub.publish("todo-counted", this.index)
+        pubSub.publish("data-change", projects)
       })
       pubSub.publish("todo-stored", this.initialTodos)
     }
 
+    // handle when todo needs to be deleted
+    pubSub.subscribe(`deletion-in-${this.name}`, this.deleteToDo.bind(this))
   }
 
   addToDo(todo: ToDo) {
     todo.index = this.todos.length;
-    todo.parent = this;
+    todo.parent = this.name;
     this.todos.push(todo);
-    pubSub.publish("todo-added", [todo, todo.index, this, true]);
+    pubSub.publish("todo-added", [todo, todo.index, true, true]);
 
     if (!this.initialTodos?.includes(todo)) {
       pubSub.publish("todo-stored", [todo])
       pubSub.publish("todo-counted", this.index)
     }
+
+    pubSub.publish("data-change", projects)
   }
 
   deleteToDo(todo: ToDo) {
@@ -80,6 +86,7 @@ class Project {
     const deletion = this.todos.splice(index, 1)[0]
     pubSub.publish("todo-deleted", index)
     pubSub.publish("todo-storage-deleted", deletion)
+    pubSub.publish("data-change", projects)
   }
 
   delete() {
@@ -87,10 +94,9 @@ class Project {
     const deletion = projects.splice(index, 1)[0];
     pubSub.publish("project-deleted", index)
     pubSub.publish("project-storage-deleted", deletion)
+    pubSub.publish("data-change", projects)
   }
 }
-
-const projects: Project[] = [];
 
 class Category {
   todos: ToDo[];
@@ -116,7 +122,7 @@ class Category {
   }
 
   removeProject(deletion: Project) {
-    this.todos = this.todos.filter(todo => todo.parent !== deletion)
+    this.todos = this.todos.filter(todo => todo.parent !== deletion.name)
   }
 }
 
@@ -126,7 +132,16 @@ const importantCategory = new Category("Important", filterImportant, "bi-star-fi
 const todayCategory = new Category("Today", filterToday, "bi-calendar-event-fill")
 const thisWeekCategory = new Category("This Week", filterThisWeek, "bi-calendar-week-fill")
 
-// bogus project for todos without assigned parent property
-const orphan = new Project("Orphan")
+// storage-related function calls
+if (!hasVisited()) {
+  populateInitialProjects()
+  setVisitedCookie()
+} else {
+  let previousData = retrieveData()
+  if (previousData) {
+    projects = previousData
+    refresh(projects)
+  }
+}
 
 export { Category, Project, ToDo, allTasksCategory };
