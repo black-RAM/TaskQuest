@@ -1,4 +1,4 @@
-import { clearVisitedCookie, hasVisited, populateInitialProjects, retrieveData, setVisitedCookie } from "./storage"
+import { clearStorage, clearVisitedCookie, hasVisited, populateInitialProjects, retrieveData, setVisitedCookie } from "./storage"
 import { filterImportant, filterThisWeek, filterToday, noFilter } from "./filters";
 import { addProject, refresh } from "./display";
 import { pubSub } from "./pubsub";
@@ -84,9 +84,9 @@ class Project {
   deleteToDo(todo: ToDo) {
     const index = this.todos.indexOf(todo)
     const deletion = this.todos.splice(index, 1)[0]
-    pubSub.publish("todo-deleted", index)
     pubSub.publish("todo-storage-deleted", deletion)
     pubSub.publish("data-change", projects)
+    pubSub.publish("todo-deleted", index)
   }
 
   delete() {
@@ -95,6 +95,14 @@ class Project {
     pubSub.publish("project-deleted", index)
     pubSub.publish("project-storage-deleted", deletion)
     pubSub.publish("data-change", projects)
+  }
+
+  load() {
+    addProject(this)
+    pubSub.publish("todo-stored", this.todos)
+    for (let i = 0; i < this.todos.length; i++) {
+      pubSub.publish("todo-counted", this.index)
+    }
   }
 }
 
@@ -137,11 +145,13 @@ if (!hasVisited()) {
   populateInitialProjects()
   setVisitedCookie()
 } else {
-  let previousData = retrieveData()
-  if (previousData) {
-    projects = previousData
-    refresh(projects)
-  }
+  projects = retrieveData()
+  refresh(projects)
+
+  // uncomment once implementation of refresh() works
+  // setTimeout(() => {
+  //   clearStorage()
+  // }, 1000);
 }
 
 export { Category, Project, ToDo, allTasksCategory };

@@ -23,7 +23,7 @@ function populateInitialProjects() {
 function setVisitedCookie() {
   const expiration = new Date()
   expiration.setFullYear(expiration.getFullYear() + 1)
-  document.cookie = `visited=true; expires=${expiration.toUTCString}; SameSite=Strict`
+  document.cookie = `visited=true; expires=${expiration.toUTCString}; SameSite=strict;`
 }
 
 function hasVisited() {
@@ -34,9 +34,13 @@ function storeData(projects: Project[]) {
   localStorage.setItem("projects", JSON.stringify(projects))
 }
 
-function retrieveData(): Project[] | null {
+function retrieveData(): Project[] {
   const projectsJSON = localStorage.getItem("projects")
-  return projectsJSON ? JSON.parse(projectsJSON) : null
+  return projectsJSON ? JSON.parse(projectsJSON) : []
+}
+
+function clearStorage() {
+  localStorage.setItem("projects", "")
 }
 
 // Function to clear the "has visited" cookie: for test purposes
@@ -47,4 +51,4 @@ function clearVisitedCookie() {
 
 pubSub.subscribe("data-change", storeData)
 
-export { setVisitedCookie, hasVisited, storeData, retrieveData, clearVisitedCookie, populateInitialProjects }
+export { setVisitedCookie, hasVisited, storeData, retrieveData, clearStorage, populateInitialProjects, clearVisitedCookie }

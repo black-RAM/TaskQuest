@@ -10,6 +10,11 @@ projectContainer.classList.add("to-do-page");
 
 function refresh(data: Project[]) {
   console.dir(data)
+  for (const project of data) {
+    // error: Uncaught TypeError: project.load is not a function
+    // because class methods are not iteratable
+    project.load()
+  }
 }
 
 function showAllTasks() {
