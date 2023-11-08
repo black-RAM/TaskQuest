@@ -65,6 +65,8 @@ class Project {
 
     // handle when todo needs to be deleted
     pubSub.subscribe(`deletion-in-${this.name}`, this.deleteToDo.bind(this))
+
+    pubSub.subscribe(`load-${this.name}`, this.load.bind(this))
   }
 
   addToDo(todo: ToDo) {
@@ -97,7 +99,8 @@ class Project {
     pubSub.publish("data-change", projects)
   }
 
-  load() {
+  private load() {
+    console.log("trying to load project")
     addProject(this)
     pubSub.publish("todo-stored", this.todos)
     for (let i = 0; i < this.todos.length; i++) {
