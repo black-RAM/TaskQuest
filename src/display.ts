@@ -99,10 +99,7 @@ function renderProject(project: Project | Category) {
 
 function renderToDo(parameters: [toDo: ToDo, index: Number, isProject: Boolean, external: Boolean]) {
   // spread parameters of tuple
-  const toDo = parameters[0];
-  const index = parameters[1];
-  const isProject = parameters[2]
-  const externalCall = parameters[3]
+  const [toDo, index, isProject, externalCall] = parameters;
 
   // HTML elements for to-do article
   const element = document.createElement("article");
@@ -236,12 +233,13 @@ function updateEditedToDo(parameters: [toDo: ToDo, index: number]) {
   }
 }
 
-function updateToDoCounter(index: Number) {
+function updateToDoCounter(parameters: [index: number, shouldIncrement: Boolean]) {
+  const [index, shouldIncrement] = parameters;
   const counter = document.querySelector(`ul#project-list > li[data-index="${index}"] .counter`)
 
   if (counter) {
     const currentCount = Number(counter.innerHTML)
-    counter.innerHTML = String(currentCount + 1);
+    counter.innerHTML = String(shouldIncrement ? currentCount + 1 : currentCount - 1);
   }
 }
 

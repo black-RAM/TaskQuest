@@ -57,7 +57,7 @@ class Project {
     if (this.initialTodos) {
       this.initialTodos.forEach(todo => {
         todo.parent = this.name;
-        pubSub.publish("todo-counted", this.index)
+        pubSub.publish("todo-counted", [this.index, true])
         pubSub.publish("data-change", projects)
       })
       pubSub.publish("todo-stored", this.initialTodos)
@@ -75,7 +75,7 @@ class Project {
 
     if (!this.initialTodos?.includes(todo)) {
       pubSub.publish("todo-stored", [todo])
-      pubSub.publish("todo-counted", this.index)
+      pubSub.publish("todo-counted", [this.index, true])
     }
 
     pubSub.publish("data-change", projects)
@@ -84,6 +84,7 @@ class Project {
   deleteToDo(todo: ToDo) {
     const index = this.todos.indexOf(todo)
     const deletion = this.todos.splice(index, 1)[0]
+    pubSub.publish("todo-counted", [this.index, false])
     pubSub.publish("todo-storage-deleted", deletion)
     pubSub.publish("data-change", projects)
     pubSub.publish("todo-deleted", index)
