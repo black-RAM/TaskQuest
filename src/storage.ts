@@ -39,16 +39,15 @@ function loadData(): Project[] {
   const loadedProjects: Project[] = []
 
   for (const project of projectsData) {
-    const initials: ToDo[] = []
+    const loadedProject = new Project(project.name, undefined, project.icon)
+
     if (project.initialTodos) {
       for (const initial of project.initialTodos) {
-        initials.push(
+        loadedProject.addToDo(
           new ToDo(initial.title, initial.description, new Date(initial.due), initial.priorityNum)
         )
       }
     }
-
-    const loadedProject = new Project(project.name, initials, project.icon)
 
     for (const todo of project.todos) {
       loadedProject.addToDo(
