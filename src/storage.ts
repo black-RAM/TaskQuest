@@ -43,7 +43,7 @@ function loadData(): Project[] {
     if (project.initialTodos) {
       for (const initial of project.initialTodos) {
         initials.push(
-          new ToDo(initial.title, initial.description, new Date(), initial.priorityNum)
+          new ToDo(initial.title, initial.description, new Date(initial.due), initial.priorityNum)
         )
       }
     }
@@ -52,7 +52,7 @@ function loadData(): Project[] {
 
     for (const todo of project.todos) {
       loadedProject.addToDo(
-        new ToDo(todo.title, todo.description, new Date(), todo.priorityNum)
+        new ToDo(todo.title, todo.description, new Date(todo.due), todo.priorityNum)
       )
     }
 
