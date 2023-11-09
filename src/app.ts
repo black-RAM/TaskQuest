@@ -1,6 +1,6 @@
-import { clearStorage, clearVisitedCookie, hasVisited, populateInitialProjects, retrieveData, setVisitedCookie } from "./storage"
+import { clearVisitedCookie, hasVisited, populateInitialProjects, loadData, setVisitedCookie } from "./storage"
 import { filterImportant, filterThisWeek, filterToday, noFilter } from "./filters";
-import { addProject, refresh } from "./display";
+import { addProject } from "./display";
 import { pubSub } from "./pubsub";
 
 let projects: Project[] = [];
@@ -65,8 +65,6 @@ class Project {
 
     // handle when todo needs to be deleted
     pubSub.subscribe(`deletion-in-${this.name}`, this.deleteToDo.bind(this))
-
-    pubSub.subscribe(`load-${this.name}`, this.load.bind(this))
   }
 
   addToDo(todo: ToDo) {
@@ -97,15 +95,6 @@ class Project {
     pubSub.publish("project-deleted", index)
     pubSub.publish("project-storage-deleted", deletion)
     pubSub.publish("data-change", projects)
-  }
-
-  private load() {
-    console.log("trying to load project")
-    addProject(this)
-    pubSub.publish("todo-stored", this.todos)
-    for (let i = 0; i < this.todos.length; i++) {
-      pubSub.publish("todo-counted", this.index)
-    }
   }
 }
 
@@ -144,17 +133,12 @@ const todayCategory = new Category("Today", filterToday, "bi-calendar-event-fill
 const thisWeekCategory = new Category("This Week", filterThisWeek, "bi-calendar-week-fill")
 
 // storage-related function calls
+// clearVisitedCookie()
 if (!hasVisited()) {
   populateInitialProjects()
   setVisitedCookie()
 } else {
-  projects = retrieveData()
-  refresh(projects)
-
-  // uncomment once implementation of refresh() works
-  // setTimeout(() => {
-  //   clearStorage()
-  // }, 1000);
+  projects = loadData()
 }
 
 export { Category, Project, ToDo, allTasksCategory };

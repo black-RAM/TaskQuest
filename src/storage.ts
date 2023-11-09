@@ -4,7 +4,6 @@ import { pubSub } from "./pubsub";
 function populateInitialProjects() {
   new Project("Goals", [
     new ToDo("Coding", "Finish the Odin Project", new Date(2023, 8, 29), 1),
-    new ToDo("Studying", "Revise for the upcoming exams", new Date(2023, 10, 1), 3),
     new ToDo("Gym", "Deadlift 40kg", new Date(2023, 9, 21), 2)
   ], "bi-bullseye");
 
@@ -34,13 +33,35 @@ function storeData(projects: Project[]) {
   localStorage.setItem("projects", JSON.stringify(projects))
 }
 
-function retrieveData(): Project[] {
+function loadData(): Project[] {
   const projectsJSON = localStorage.getItem("projects")
-  return projectsJSON ? JSON.parse(projectsJSON) : []
-}
+  const projectsData: Project[] = projectsJSON ? JSON.parse(projectsJSON) : []
+  const loadedProjects: Project[] = []
 
-function clearStorage() {
-  localStorage.setItem("projects", "")
+  for (const project of projectsData) {
+    const initials: ToDo[] = []
+    if (project.initialTodos) {
+      for (const initial of project.initialTodos) {
+        initials.push(
+          new ToDo(initial.title, initial.description, new Date(), initial.priorityNum)
+        )
+      }
+    }
+
+    const loadedProject = new Project(project.name, initials, project.icon)
+
+    for (const todo of project.todos) {
+      loadedProject.addToDo(
+        new ToDo(todo.title, todo.description, new Date(), todo.priorityNum)
+      )
+    }
+
+    loadedProjects.push(
+      loadedProject
+    )
+  }
+
+  return loadedProjects
 }
 
 // Function to clear the "has visited" cookie: for test purposes
@@ -51,4 +72,4 @@ function clearVisitedCookie() {
 
 pubSub.subscribe("data-change", storeData)
 
-export { setVisitedCookie, hasVisited, storeData, retrieveData, clearStorage, populateInitialProjects, clearVisitedCookie }
+export { setVisitedCookie, hasVisited, storeData, loadData, populateInitialProjects, clearVisitedCookie }

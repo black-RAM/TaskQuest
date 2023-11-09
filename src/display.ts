@@ -8,16 +8,6 @@ import "./resizer.js";
 const projectContainer = document.createElement("section");
 projectContainer.classList.add("to-do-page");
 
-function refresh(data: Project[]) {
-  console.dir(data)
-  for (const project of data) {
-    // project.load()
-    // error: Uncaught TypeError: project.load is not a function
-    // because class methods are not iteratable
-    pubSub.publish(`load-${project.name}`)
-  }
-}
-
 function showAllTasks() {
   clearPage()
   renderProject(allTasksCategory)
@@ -275,4 +265,4 @@ pubSub.subscribe("todo-counted", updateToDoCounter)
 pubSub.subscribe("todo-deleted", removeToDo)
 pubSub.subscribe("project-deleted", removeProject)
 
-export { refresh, addProject }
+export { addProject }
