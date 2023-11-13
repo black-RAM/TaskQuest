@@ -14,9 +14,6 @@ function showAllTasks() {
 }
 
 function addProject(project: Project | Category) {
-  // ignore bogus orphan project
-  if (project.name === "Orphan") return
-
   // show all tasks on startup
   if (project.name === "All Tasks") {
     setTimeout(() => {
