@@ -1,5 +1,4 @@
-# to-do
-Features:
+# TaskQuest App Features
 - A project contains a list of various todos.
 - Each project renders in its own different page.
 - Navigate/add/delete projects pages by using the sidebar (which is collapsable on mobile).
