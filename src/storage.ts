@@ -14,14 +14,12 @@ function populateInitialProjects() {
   ], "bi-tv-fill")
 }
 
-function setVisitedCookie() {
-  const expiration = new Date()
-  expiration.setFullYear(expiration.getFullYear() + 1)
-  document.cookie = `visited=true; expires=${expiration.toUTCString}; SameSite=strict;`
+function setVisitedFlag() {
+  localStorage.setItem('visited', 'true');
 }
 
 function hasVisited() {
-  return document.cookie.split('; ').some(cookie => cookie.startsWith('visited='));
+  return localStorage.getItem('visited') === 'true';
 }
 
 function storeData(projects: Project[]) {
@@ -66,4 +64,4 @@ function clearVisitedCookie() {
 
 pubSub.subscribe("data-change", storeData)
 
-export { setVisitedCookie, hasVisited, storeData, loadData, populateInitialProjects, clearVisitedCookie }
+export { setVisitedFlag, hasVisited, storeData, loadData, populateInitialProjects, clearVisitedCookie }

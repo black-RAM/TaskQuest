@@ -1,7 +1,8 @@
-import { clearVisitedCookie, hasVisited, populateInitialProjects, loadData, setVisitedCookie } from "./storage"
+import { clearVisitedCookie, hasVisited, populateInitialProjects, loadData, setVisitedFlag } from "./storage"
 import { filterImportant, filterThisWeek, filterToday, noFilter } from "./filters";
 import { addProject } from "./display";
 import { pubSub } from "./pubsub";
+import "./sw"
 
 let projects: Project[] = [];
 
@@ -137,7 +138,7 @@ const thisWeekCategory = new Category("This Week", filterThisWeek, "bi-calendar-
 // clearVisitedCookie()
 if (!hasVisited()) {
   populateInitialProjects()
-  setVisitedCookie()
+  setVisitedFlag()
 } else {
   projects = loadData()
 }
