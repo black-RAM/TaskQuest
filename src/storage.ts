@@ -56,12 +56,6 @@ function loadData(): Project[] {
   return loadedProjects
 }
 
-// Function to clear the "has visited" cookie: for test purposes
-function clearVisitedCookie() {
-  const pastDate = new Date(0); // Set the date to a past time (Unix epoch)
-  document.cookie = `visited=true; expires=${pastDate.toUTCString()}; path=/`;
-}
-
 pubSub.subscribe("data-change", storeData)
 
-export { setVisitedFlag, hasVisited, storeData, loadData, populateInitialProjects, clearVisitedCookie }
+export { setVisitedFlag, hasVisited, storeData, loadData, populateInitialProjects }

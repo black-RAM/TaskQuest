@@ -1,4 +1,4 @@
-import { clearVisitedCookie, hasVisited, populateInitialProjects, loadData, setVisitedFlag } from "./storage"
+import { hasVisited, populateInitialProjects, loadData, setVisitedFlag } from "./storage"
 import { filterImportant, filterThisWeek, filterToday, noFilter } from "./filters";
 import { addProject } from "./display";
 import { pubSub } from "./pubsub";
@@ -41,8 +41,15 @@ class ToDo {
   }
 }
 
-class Project {
-  todos: ToDo[];
+class Group {
+  todos: ToDo[]
+
+  constructor() {
+    this.todos = []
+  }
+}
+
+class Project extends Group {
   index: Number;
 
   constructor(
@@ -50,7 +57,7 @@ class Project {
     public initialTodos?: ToDo[],
     public icon: String = "bi-calendar-fill"
   ) {
-    this.todos = [];
+    super()
     projects.push(this);
     this.index = projects.indexOf(this);
     addProject(this)
@@ -100,15 +107,14 @@ class Project {
   }
 }
 
-class Category {
-  todos: ToDo[];
+class Category extends Group {
 
   constructor(
     public name: string,
     private filterFunction: (todos: ToDo[]) => ToDo[],
     public icon: String = "bi-calendar-fill"
   ) {
-    this.todos = [];
+    super()
     addProject(this)
     pubSub.subscribe("todo-stored", this.updateCategory.bind(this))
     pubSub.subscribe("todo-storage-deleted", this.removeFromCategory.bind(this))
@@ -135,7 +141,6 @@ const todayCategory = new Category("Today", filterToday, "bi-calendar-event-fill
 const thisWeekCategory = new Category("This Week", filterThisWeek, "bi-calendar-week-fill")
 
 // storage-related function calls
-// clearVisitedCookie()
 if (!hasVisited()) {
   populateInitialProjects()
   setVisitedFlag()
