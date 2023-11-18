@@ -126,13 +126,19 @@ function toDoForm(container: HTMLElement, position: DOMRect, formAction: FormAct
 
   modal.appendChild(form)
   container.appendChild(modal)
+  modal.showModal()
 
   // position modal
-  modal.style.top = `${position.bottom + 10}px`
+  const positionTooLow = window.innerHeight / 2 + 100 < position.bottom
+
+  if(positionTooLow) {
+    modal.style.top = `${position.top - modal.clientHeight - 15}px`
+  } else {
+    modal.style.top = `${position.bottom + 10}px`
+  }
   modal.style.left = `${position.left}px`
   modal.style.right = '1.5rem'
   modal.classList.add("mt-0")
-  modal.showModal()
 
   return { titleInput, detailsInput, dateInput, priorityInput, submit }
 }

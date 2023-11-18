@@ -158,13 +158,15 @@ function renderToDo(parameters: [toDo: ToDo, index: Number, isProject: Boolean, 
     const modalHeight = detailsModal.clientHeight
     const buttonPos = detailsButton.getBoundingClientRect()
     const buttonBottom = buttonPos.bottom + window.scrollY
-    const buttonTooLow = window.innerHeight / 2 < buttonBottom
+    const buttonTooLow = window.innerHeight / 2 + 100 < buttonBottom
 
     if(buttonTooLow) {
       detailsModal.style.top = `${Math.ceil(buttonPos.top - modalHeight - 15)}px`
     } else {
       detailsModal.style.top = `${Math.ceil(buttonBottom) + 10}px`
     }
+
+    detailsModal.style.right = `${buttonPos.right}px`
     
   })
 
