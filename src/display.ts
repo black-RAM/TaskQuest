@@ -152,11 +152,20 @@ function renderToDo(parameters: [toDo: ToDo, index: Number, isProject: Boolean, 
 
   // details button
   detailsButton.addEventListener("click", () => {
-    // position modal under to-do element
+    detailsModal.showModal()
+
+    // position modal
+    const modalHeight = detailsModal.clientHeight
     const buttonPos = detailsButton.getBoundingClientRect()
-    const scrollY = window.scrollY;
-    detailsModal.style.top = `${Math.ceil(buttonPos.bottom + scrollY) + 10}px`
-    detailsModal.show()
+    const buttonBottom = buttonPos.bottom + window.scrollY
+    const buttonTooLow = window.innerHeight / 2 < buttonBottom
+
+    if(buttonTooLow) {
+      detailsModal.style.top = `${Math.ceil(buttonPos.top - modalHeight - 15)}px`
+    } else {
+      detailsModal.style.top = `${Math.ceil(buttonBottom) + 10}px`
+    }
+    
   })
 
   closeDetailsModal.addEventListener("click", () => {
