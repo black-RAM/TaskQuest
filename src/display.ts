@@ -54,6 +54,8 @@ function addProject(project: Project | Category) {
 }
 
 function renderProject(project: Project | Category) {
+  const randomImg = Math.floor(Math.random() * 10) + 1;
+  projectContainer.style.backgroundImage = `url("./bg/img-${randomImg}.jpg")`
 
   const heading = document.createElement("header");
   const titleDiv = document.createElement("div");
