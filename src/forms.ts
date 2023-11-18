@@ -99,6 +99,7 @@ function toDoForm(container: HTMLElement, position: DOMRect, formAction: FormAct
   // run necessary action when submitted
   form.addEventListener("submit", () => {
     formAction(titleInput.value, detailsInput.value, dateInput.value, +priorityInput.value)
+    container.removeChild(modal)
   })
 
   // adding to DOM
