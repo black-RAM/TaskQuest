@@ -62,6 +62,8 @@ function renderProject(project: Project | Category) {
   // wallpaper
   const randomImg = Math.floor(Math.random() * 10) + 1;
   projectContainer.style.backgroundImage = `url("./bg/img-${randomImg}.jpg")`
+  projectContainer.style.backgroundPosition = "center"
+  projectContainer.style.backgroundSize = "cover"
 
   // html element creation
   const heading = document.createElement("header");
@@ -279,6 +281,15 @@ function renderGamePanel() {
   clearPage()
   projectContainer.classList.replace("to-do-page", "game-page")
 
+  // heading
+  const header = document.createElement("h1")
+  header.innerText = "Game Panel"
+  projectContainer.appendChild(header)
+
+  // creating card for each game
+  const cardContainer = document.createElement("div")
+  cardContainer.classList.add("card-container")
+
   for(const game of gamePanel.games) {
     const gameContainer = document.createElement("dialog")
     const gamePlay = document.createElement("iframe")
@@ -289,6 +300,7 @@ function renderGamePanel() {
     const title = document.createElement("h5")
     
     text.classList.add("card-body")
+    thumbnail.classList.add("game-panel-img")
     thumbnail.src = game.iconFilePath
     title.innerText = game.name
     gamePlay.src = game.link
@@ -296,21 +308,24 @@ function renderGamePanel() {
     closeGame.innerHTML = '<i class="bi bi-x-lg"></i>'
 
     thumbnail.addEventListener("click", () => {
+      projectContainer.appendChild(gameContainer)
       gameContainer.showModal()
     })
 
     closeGame.addEventListener("click", () => {
       gameContainer.close()
+      projectContainer.removeChild(gameContainer)
     })
 
     text.appendChild(title)
     card.appendChild(thumbnail)
     card.appendChild(text)
-    projectContainer.appendChild(card)
+    cardContainer.appendChild(card)
     gameContainer.appendChild(closeGame)
     gameContainer.appendChild(gamePlay)
-    projectContainer.appendChild(gameContainer)
   }
+  
+  projectContainer.appendChild(cardContainer)
 }
 
 document.getElementById("game-icon")?.addEventListener("click", () => {

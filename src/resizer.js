@@ -15,7 +15,7 @@ function sizeAndToggle() {
     main.addEventListener('click', function (event) {
       event.stopPropagation()
 
-      if (!nav.contains(event.target)) {
+      if (!nav.contains(event.target) && window.innerWidth < 575) {
         menu.classList.add("d-none")
       }
     })
@@ -34,6 +34,12 @@ function sizeAndToggle() {
     const page = document.getElementsByTagName("section")[0];
     page.style.height = `${availableHeight}px`;
   }, 100); // 100ms delay so section can first be rendered
+
+  // maintain aspect ration on game panel image cards
+  const cardImgs = [...document.getElementsByClassName("game-panel-img")]
+  cardImgs.forEach(img => {
+    img.style.height = `${img.clientWidth}px`
+  })
 }
 
 // Add an event listener to check screen width when the page loads and on resize
