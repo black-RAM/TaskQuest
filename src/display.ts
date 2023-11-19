@@ -1,5 +1,6 @@
 import { Category, Project, ToDo, allTasksCategory } from "./app";
 import { addToDoForm, editToDoForm } from "./forms";
+import { gamePanel } from "./games";
 import { pubSub } from "./pubsub";
 import { format } from 'date-fns';
 import "./style.scss";
@@ -46,7 +47,6 @@ function addProject(project: Project | Category) {
   }
 
   listText.addEventListener("click", () => {
-    clearPage()
     renderProject(project)
   })
 
@@ -54,9 +54,16 @@ function addProject(project: Project | Category) {
 }
 
 function renderProject(project: Project | Category) {
+  // reset
+  clearPage()
+  projectContainer.classList.remove("game-page")
+  projectContainer.classList.add("to-do-page")
+
+  // wallpaper
   const randomImg = Math.floor(Math.random() * 10) + 1;
   projectContainer.style.backgroundImage = `url("./bg/img-${randomImg}.jpg")`
 
+  // html element creation
   const heading = document.createElement("header");
   const titleDiv = document.createElement("div");
   const title = document.createElement("h2");
@@ -255,6 +262,7 @@ function updateToDoCounter(parameters: [index: number, shouldIncrement: Boolean]
 
 function clearPage() {
   projectContainer.innerHTML = ""
+  projectContainer.style.background = "none"
 }
 
 function removeToDo(index: Number) {
@@ -266,6 +274,48 @@ function removeProject(index: Number) {
   const deletedLI = document.querySelector(`li[data-index="${index}"]`)
   if (deletedLI) document.getElementById("project-list")?.removeChild(deletedLI)
 }
+
+function renderGamePanel() {
+  clearPage()
+  projectContainer.classList.replace("to-do-page", "game-page")
+
+  for(const game of gamePanel.games) {
+    const gameContainer = document.createElement("dialog")
+    const gamePlay = document.createElement("iframe")
+    const closeGame = document.createElement("button")
+    const card = document.createElement("article")
+    const thumbnail = document.createElement("img")
+    const text = document.createElement("div")
+    const title = document.createElement("h5")
+    
+    text.classList.add("card-body")
+    thumbnail.src = game.iconFilePath
+    title.innerText = game.name
+    gamePlay.src = game.link
+
+    closeGame.innerHTML = '<i class="bi bi-x-lg"></i>'
+
+    thumbnail.addEventListener("click", () => {
+      gameContainer.showModal()
+    })
+
+    closeGame.addEventListener("click", () => {
+      gameContainer.close()
+    })
+
+    text.appendChild(title)
+    card.appendChild(thumbnail)
+    card.appendChild(text)
+    projectContainer.appendChild(card)
+    gameContainer.appendChild(closeGame)
+    gameContainer.appendChild(gamePlay)
+    projectContainer.appendChild(gameContainer)
+  }
+}
+
+document.getElementById("game-icon")?.addEventListener("click", () => {
+  renderGamePanel()
+})
 
 pubSub.subscribe("todo-added", renderToDo);
 pubSub.subscribe("todo-updated", updateEditedToDo)

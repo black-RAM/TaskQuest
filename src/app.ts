@@ -2,6 +2,7 @@ import { hasVisited, populateInitialProjects, loadData, setVisitedFlag } from ".
 import { filterImportant, filterThisWeek, filterToday, noFilter } from "./filters";
 import { addProject } from "./display";
 import { pubSub } from "./pubsub";
+import { Game } from "./games";
 import "./sw"
 
 let projects: Project[] = [];
@@ -136,9 +137,16 @@ class Category extends Group {
 
 // Create categories with custom filter functions
 const allTasksCategory = new Category("All Tasks", noFilter, "bi-calendar-check-fill")
-const importantCategory = new Category("Important", filterImportant, "bi-star-fill")
-const todayCategory = new Category("Today", filterToday, "bi-calendar-event-fill")
-const thisWeekCategory = new Category("This Week", filterThisWeek, "bi-calendar-week-fill")
+new Category("Important", filterImportant, "bi-star-fill")
+new Category("Today", filterToday, "bi-calendar-event-fill")
+new Category("This Week", filterThisWeek, "bi-calendar-week-fill")
+
+// Create Games example:
+new Game("Tic Tac Toe", "./thumbnails/tic-tac-toe.jpg", "https://www.youtube.com/")
+new Game("Tic Tac Toe", "./thumbnails/tic-tac-toe.jpg", "https://www.youtube.com/")
+new Game("Tic Tac Toe", "./thumbnails/tic-tac-toe.jpg", "https://www.youtube.com/")
+new Game("Tic Tac Toe", "./thumbnails/tic-tac-toe.jpg", "https://www.youtube.com/")
+new Game("Tic Tac Toe", "./thumbnails/tic-tac-toe.jpg", "https://www.youtube.com/")
 
 // storage-related function calls
 if (!hasVisited()) {
