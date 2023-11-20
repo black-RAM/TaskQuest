@@ -259,6 +259,7 @@ function updateToDoCounter(parameters: [index: number, shouldIncrement: Boolean]
   if (counter) {
     const currentCount = Number(counter.innerHTML)
     counter.innerHTML = String(shouldIncrement ? currentCount + 1 : currentCount - 1);
+    if(counter.innerHTML === "0") counter.innerHTML = ""
   }
 }
 

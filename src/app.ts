@@ -6,17 +6,18 @@ import { Game } from "./games";
 import "./sw"
 
 let projects: Project[] = [];
+let coins = 0;
 
 class ToDo {
   checked: Boolean;
-  index: Number;
+  index: number;
   parent: string;
 
   constructor(
     public title: string,
     public description: string,
     public due: Date,
-    public priorityNum: Number
+    public priorityNum: number
   ) {
     this.parent = "orphan"
     this.checked = false
@@ -39,6 +40,23 @@ class ToDo {
     this.priorityNum = newPriority
     pubSub.publish("todo-updated", [this, this.index])
     pubSub.publish("data-change", projects)
+  }
+
+  getWorth() {
+    let worth = this.priorityNum * 10
+
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    const dueDate = new Date(this.due)
+    dueDate.setHours(0, 0, 0, 0)
+
+    const duePassed = today > dueDate;
+
+    if(duePassed) {
+      worth = worth * -1; // worth is subtractive if overdue
+    }
+
+    return worth
   }
 }
 
@@ -96,7 +114,14 @@ class Project extends Group {
     pubSub.publish("todo-counted", [this.index, false])
     pubSub.publish("todo-storage-deleted", deletion)
     pubSub.publish("data-change", projects)
-    pubSub.publish("todo-deleted", index)
+    pubSub.publish("todo-deleted", todo.index)
+
+    // award coins
+    if(deletion.checked) {
+      const coinChange = deletion.getWorth()
+      if(coins + coinChange >= 0) coins += coinChange
+      console.log("coins: ", coins)
+    }
   }
 
   delete() {

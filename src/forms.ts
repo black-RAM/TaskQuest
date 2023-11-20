@@ -134,7 +134,7 @@ function toDoForm(container: HTMLElement, position: DOMRect, formAction: FormAct
   if(positionTooLow) {
     modal.style.top = `${position.top - modal.clientHeight - 15}px`
   } else {
-    modal.style.top = `${position.bottom + 10}px`
+    modal.style.top = `${position.bottom}px`
   }
   modal.style.left = `${position.left}px`
   modal.style.right = '1.5rem'
