@@ -42,7 +42,7 @@ class ToDo {
     pubSub.publish("data-change", projects)
   }
 
-  getWorth() {
+  getWorth():[worth: number, duePassed: boolean] {
     let worth = this.priorityNum * 10
 
     const today = new Date()
@@ -52,11 +52,7 @@ class ToDo {
 
     const duePassed = today > dueDate;
 
-    if(duePassed) {
-      worth = worth * -1; // worth is subtractive if overdue
-    }
-
-    return worth
+    return [worth, duePassed]
   }
 }
 
@@ -118,9 +114,21 @@ class Project extends Group {
 
     // award coins
     if(deletion.checked) {
-      const coinChange = deletion.getWorth()
-      if(coins + coinChange >= 0) coins += coinChange
-      console.log("coins: ", coins)
+      const [coinChange, negative] = deletion.getWorth()
+
+      if(negative) {
+        const nonNegativeOperation = coins - coinChange >= 0
+
+        if(nonNegativeOperation) {
+          coins -= coinChange
+          console.log(`Oops! You lost ${coinChange} coins. Balance: ${coins}`)
+        } else {
+          console.log(`Oops! Coins to few to subtract from.`)
+        }
+      } else {
+        coins += coinChange
+        console.log(`Yay! You earned ${coinChange} coins. Total coins:  ${coins}`)
+      }
     }
   }
 
