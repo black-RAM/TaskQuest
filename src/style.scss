@@ -109,6 +109,19 @@ section.to-do-page {
       }
     }
   }
+
+  aside.message {
+    @extend .d-flex, .justify-content-center;
+    position: absolute;
+    bottom: 0;
+
+    div {
+      @extend .py-2, .px-3, .rounded-top;
+      p {
+        @extend .fs-5, .m-0;
+      }
+    }
+  }
 }
 
 section.game-page{

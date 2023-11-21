@@ -121,13 +121,14 @@ class Project extends Group {
 
         if(nonNegativeOperation) {
           coins -= coinChange
-          console.log(`Oops! You lost ${coinChange} coins. Balance: ${coins}`)
+          pubSub.publish("coin-message", `Oops! You lost ${coinChange} coins. Balance: ${coins}`)
         } else {
-          console.log(`Oops! Coins to few to subtract from.`)
+          coins = 0
+          pubSub.publish("coin-message", `Oops! Coins to few to subtract from.`)
         }
       } else {
         coins += coinChange
-        console.log(`Yay! You earned ${coinChange} coins. Total coins:  ${coins}`)
+        pubSub.publish("coin-message", `Yay! You earned ${coinChange} coins. Total coins:  ${coins}`)
       }
     }
   }

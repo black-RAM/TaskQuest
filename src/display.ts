@@ -333,10 +333,30 @@ document.getElementById("game-icon")?.addEventListener("click", () => {
   renderGamePanel()
 })
 
+function renderMessage(message: string) {
+  const goodNews = message.startsWith("Yay!")
+  const textBox = document.createElement("aside")
+  const background = document.createElement("div")
+  const text = document.createElement("p")
+  text.innerText = message
+
+  background.classList.add(`bg-${goodNews ? "success": "danger"}-subtle`)
+  textBox.classList.add("message")
+
+  background.appendChild(text)
+  textBox.appendChild(background)
+  textBox.style.width = `${projectContainer.clientWidth - (projectContainer.clientWidth / 100 * 5)}px`
+  projectContainer.appendChild(textBox)
+  setTimeout(() => {
+    projectContainer.removeChild(textBox)
+  }, 1500);
+}
+
 pubSub.subscribe("todo-added", renderToDo);
 pubSub.subscribe("todo-updated", updateEditedToDo)
 pubSub.subscribe("todo-counted", updateToDoCounter)
 pubSub.subscribe("todo-deleted", removeToDo)
 pubSub.subscribe("project-deleted", removeProject)
+pubSub.subscribe("coin-message", renderMessage)
 
 export { addProject }
