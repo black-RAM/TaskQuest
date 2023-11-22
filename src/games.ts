@@ -22,14 +22,14 @@ class Game {
 }
 
 class Bank {
-  private coins: number
 
-  constructor() {
-    this.coins = 0
-  }
+  constructor(
+    private coins: number
+  ) {}
 
   deposit(amount: number) {
     this.coins += amount
+    this.store()
   }
 
   deduct(amount: number) {
@@ -41,15 +41,22 @@ class Bank {
       this.coins = 0
     }
 
+    this.store()
+
     return deductible
   }
 
   showBalance() {
     return this.coins
   }
+
+  private store() {
+    localStorage.setItem("coins", String(this.coins))
+  }
 }
 
 const gamePanel = new GamePanel()
-const bank = new Bank()
+const coins = Number(localStorage.getItem("coins"))
+const bank = new Bank(coins)
 
 export { gamePanel, Game, bank }
