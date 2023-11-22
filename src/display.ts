@@ -299,17 +299,22 @@ function renderGamePanel() {
     const thumbnail = document.createElement("img")
     const text = document.createElement("div")
     const title = document.createElement("h5")
+    const cost = document.createElement("small")
     
     text.classList.add("card-body")
     thumbnail.classList.add("game-panel-img")
+
     thumbnail.src = game.iconFilePath
+    thumbnail.title = "Click to play!"
     title.innerText = game.name
+    cost.innerHTML = `Cost: <i class="bi bi-coin text-warning"></i> ${game.cost}`
     gamePlay.src = game.link
 
     closeGame.innerHTML = '<i class="bi bi-x-lg"></i>'
 
     thumbnail.addEventListener("click", () => {
       projectContainer.appendChild(gameContainer)
+      
       gameContainer.showModal()
     })
 
@@ -319,6 +324,7 @@ function renderGamePanel() {
     })
 
     text.appendChild(title)
+    text.appendChild(cost)
     card.appendChild(thumbnail)
     card.appendChild(text)
     cardContainer.appendChild(card)

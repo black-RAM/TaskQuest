@@ -176,9 +176,9 @@ new Category("Today", filterToday, "bi-calendar-event-fill")
 new Category("This Week", filterThisWeek, "bi-calendar-week-fill")
 
 // Create Games
-new Game("Cross Code", "./thumbnails/cross-code.jpg", "https://www.cross-code.com/en/start")
-new Game("Missile Game", "./thumbnails/missile-game.jpg", "https://missile-game.bwhmather.com/")
-new Game("Chrome Dino", "./thumbnails/chrome-dino.jpeg", "https://chromedino.com/")
+new Game("Cross Code", "./thumbnails/cross-code.jpg", "https://www.cross-code.com/en/start", 30)
+new Game("Missile Game", "./thumbnails/missile-game.jpg", "https://missile-game.bwhmather.com/", 20)
+new Game("Chrome Dino", "./thumbnails/chrome-dino.jpeg", "https://chromedino.com/", 10)
 
 // storage-related function calls
 if (!hasVisited()) {
@@ -188,4 +188,4 @@ if (!hasVisited()) {
   projects = loadData()
 }
 
-export { Category, Project, ToDo, allTasksCategory };
+export { Category, Project, ToDo, allTasksCategory, coins };

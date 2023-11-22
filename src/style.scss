@@ -116,7 +116,7 @@ section.to-do-page {
     bottom: 0;
 
     div {
-      @extend .py-2, .px-3, .rounded-top;
+      @extend .text-center, .py-2, .px-3, .rounded-top;
       p {
         @extend .fs-5, .m-0;
       }
