@@ -21,6 +21,35 @@ class Game {
   }
 }
 
-const gamePanel = new GamePanel()
+class Bank {
+  private coins: number
 
-export { gamePanel, Game }
+  constructor() {
+    this.coins = 0
+  }
+
+  deposit(amount: number) {
+    this.coins += amount
+  }
+
+  deduct(amount: number) {
+    const deductible = (this.coins - amount) >= 0
+
+    if(deductible) {
+      this.coins -= amount
+    } else {
+      this.coins = 0
+    }
+
+    return deductible
+  }
+
+  showBalance() {
+    return this.coins
+  }
+}
+
+const gamePanel = new GamePanel()
+const bank = new Bank()
+
+export { gamePanel, Game, bank }

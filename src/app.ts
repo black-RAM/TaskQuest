@@ -1,12 +1,11 @@
 import { hasVisited, populateInitialProjects, loadData, setVisitedFlag } from "./storage"
 import { filterImportant, filterThisWeek, filterToday, noFilter } from "./filters";
 import { addProject } from "./display";
+import { Game, bank } from "./games";
 import { pubSub } from "./pubsub";
-import { Game } from "./games";
 import "./sw"
 
 let projects: Project[] = [];
-let coins = 0;
 
 class ToDo {
   checked: Boolean;
@@ -42,7 +41,7 @@ class ToDo {
     pubSub.publish("data-change", projects)
   }
 
-  getWorth():[worth: number, duePassed: boolean] {
+  getWorth() : [worth: number, punctual: boolean] {
     let worth = this.priorityNum * 10
 
     const today = new Date()
@@ -50,9 +49,9 @@ class ToDo {
     const dueDate = new Date(this.due)
     dueDate.setHours(0, 0, 0, 0)
 
-    const duePassed = today > dueDate;
+    const punctual = today < dueDate;
 
-    return [worth, duePassed]
+    return [worth, punctual]
   }
 }
 
@@ -114,21 +113,21 @@ class Project extends Group {
 
     // award coins
     if(deletion.checked) {
-      const [coinChange, negative] = deletion.getWorth()
+      const [reward, positive] = deletion.getWorth()
 
-      if(negative) {
-        const nonNegativeOperation = coins - coinChange >= 0
-
-        if(nonNegativeOperation) {
-          coins -= coinChange
-          pubSub.publish("coin-message", `Oops! You lost ${coinChange} coins. Balance: ${coins}`)
-        } else {
-          coins = 0
-          pubSub.publish("coin-message", `Oops! Coins to few to subtract from.`)
-        }
+      if (positive) {
+        bank.deposit(reward)  
+        pubSub.publish("coin-message", 
+          `Yay! You earned ${reward} coins. Total coins:  ${bank.showBalance()}`
+        )
+      } else if (bank.deduct(reward)) {
+        pubSub.publish("coin-message", 
+          `Late completion! You lost ${reward} coins. Balance: ${bank.showBalance()}`
+        )
       } else {
-        coins += coinChange
-        pubSub.publish("coin-message", `Yay! You earned ${coinChange} coins. Total coins:  ${coins}`)
+        pubSub.publish("coin-message", 
+          `Error! Coins to few to subtract from.`
+        )
       }
     }
   }
@@ -188,4 +187,4 @@ if (!hasVisited()) {
   projects = loadData()
 }
 
-export { Category, Project, ToDo, allTasksCategory, coins };
+export { Category, Project, ToDo, allTasksCategory };
