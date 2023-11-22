@@ -1,6 +1,6 @@
 import { Category, Project, ToDo, allTasksCategory } from "./app";
 import { addToDoForm, editToDoForm } from "./forms";
-import { gamePanel } from "./games";
+import { gamePanel, bank } from "./games";
 import { pubSub } from "./pubsub";
 import { format } from 'date-fns';
 import "./style.scss";
@@ -313,14 +313,29 @@ function renderGamePanel() {
     closeGame.innerHTML = '<i class="bi bi-x-lg"></i>'
 
     thumbnail.addEventListener("click", () => {
-      projectContainer.appendChild(gameContainer)
-      
-      gameContainer.showModal()
+
+      const userCanPay = bank.deduct(game.cost)
+
+      if(userCanPay) {
+        projectContainer.appendChild(gameContainer)
+        gameContainer.showModal()
+        renderMessage(`Paid ${game.cost} coins for a 10-minute gaming session.`, gameContainer)
+
+        setTimeout(() => {
+          gameContainer.close()
+          renderMessage("Session done. Pay again to play.")
+        }, 1000 * 60 * 10); // ten minutes
+      } else {
+        renderMessage("Not enough coins to pay. Complete more to-dos.")
+      }
     })
 
     closeGame.addEventListener("click", () => {
       gameContainer.close()
       projectContainer.removeChild(gameContainer)
+
+      bank.deposit(game.cost)
+      renderMessage("Yay! Coins refunded")
     })
 
     text.appendChild(title)
@@ -339,7 +354,7 @@ document.getElementById("game-icon")?.addEventListener("click", () => {
   renderGamePanel()
 })
 
-function renderMessage(message: string) {
+function renderMessage(message: string, container = projectContainer) {
   const goodNews = message.startsWith("Yay!")
   const textBox = document.createElement("aside")
   const background = document.createElement("div")
@@ -351,10 +366,10 @@ function renderMessage(message: string) {
 
   background.appendChild(text)
   textBox.appendChild(background)
-  textBox.style.width = `${projectContainer.clientWidth - (projectContainer.clientWidth / 100 * 5)}px`
-  projectContainer.appendChild(textBox)
+  textBox.style.width = `calc(${container.clientWidth}px - 3rem)`
+  container.appendChild(textBox)
   setTimeout(() => {
-    projectContainer.removeChild(textBox)
+    container.removeChild(textBox)
   }, 1500);
 }
 

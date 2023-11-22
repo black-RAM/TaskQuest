@@ -49,7 +49,7 @@ class ToDo {
     const dueDate = new Date(this.due)
     dueDate.setHours(0, 0, 0, 0)
 
-    const punctual = today < dueDate;
+    const punctual = today <= dueDate;
 
     return [worth, punctual]
   }
@@ -175,9 +175,9 @@ new Category("Today", filterToday, "bi-calendar-event-fill")
 new Category("This Week", filterThisWeek, "bi-calendar-week-fill")
 
 // Create Games
-new Game("Cross Code", "./thumbnails/cross-code.jpg", "https://www.cross-code.com/en/start", 30)
-new Game("Missile Game", "./thumbnails/missile-game.jpg", "https://missile-game.bwhmather.com/", 20)
-new Game("Chrome Dino", "./thumbnails/chrome-dino.jpeg", "https://chromedino.com/", 10)
+new Game("Cross Code", "./thumbnails/cross-code.jpg", "https://www.cross-code.com/en/start", 60)
+new Game("Missile Game", "./thumbnails/missile-game.jpg", "https://missile-game.bwhmather.com/", 40)
+new Game("Chrome Dino", "./thumbnails/chrome-dino.jpeg", "https://chromedino.com/", 20)
 
 // storage-related function calls
 if (!hasVisited()) {

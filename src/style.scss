@@ -29,6 +29,20 @@ nav ul {
 section.to-do-page,
 section.game-page {
   @extend .col-12, .col-sm-7, .col-lg-9, .bg-body-secondary, .overflow-y-scroll, .p-4;
+
+  aside.message {
+      @extend .d-flex, .justify-content-center;
+      position: absolute;
+      bottom: 0;
+
+      div {
+        @extend .text-center, .py-2, .px-3, .rounded-top;
+  
+        p {
+          @extend .fs-5, .m-0;
+        }
+      }
+    }
 }
 
 section.to-do-page {
@@ -106,19 +120,6 @@ section.to-do-page {
 
       button:last-child {
         @extend .bg-danger;
-      }
-    }
-  }
-
-  aside.message {
-    @extend .d-flex, .justify-content-center;
-    position: absolute;
-    bottom: 0;
-
-    div {
-      @extend .text-center, .py-2, .px-3, .rounded-top;
-      p {
-        @extend .fs-5, .m-0;
       }
     }
   }
