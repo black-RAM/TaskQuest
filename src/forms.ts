@@ -37,7 +37,7 @@ function addProjectForm() {
 
 addProjectForm()
 
-function toDoForm(container: HTMLElement, position: DOMRect, formAction: FormActionFunction) {
+function toDoForm(container: HTMLElement, position: DOMRect, formAction: FormActionFunction, isEditForm = false) {
   if (document.getElementsByClassName("to-do-form")[0]) return // prevent duplicates
 
   // HTML element creation
@@ -53,8 +53,10 @@ function toDoForm(container: HTMLElement, position: DOMRect, formAction: FormAct
   const dateText = document.createElement("label")
   const dateInput = document.createElement("input")
   const priorityGroup = document.createElement("div")
-  const priorityText = document.createElement("label")
-  const priorityInput = document.createElement("input")
+  const priorityText = document.createElement("span")
+  const priorityBtn1 = document.createElement("button")
+  const priorityBtn2 = document.createElement("button")
+  const priorityBtn3 = document.createElement("button")
   const submitGroup = document.createElement("div")
   const submit = document.createElement("button")
   const cancel = document.createElement("button")
@@ -64,6 +66,9 @@ function toDoForm(container: HTMLElement, position: DOMRect, formAction: FormAct
   detailsText.innerText = "Details: "
   dateText.innerText = "Date: "
   priorityText.innerText = "Priority: "
+  priorityBtn1.innerText = "low"
+  priorityBtn2.innerText = "med"
+  priorityBtn3.innerText = "high"
   submit.innerText = "Add"
   cancel.innerText = "Cancel"
 
@@ -83,13 +88,36 @@ function toDoForm(container: HTMLElement, position: DOMRect, formAction: FormAct
   dateText.htmlFor = "date"
   dateInput.type = "date"
 
-  priorityInput.required = true
-  priorityInput.type = "number"
-  priorityInput.min = "1"
-  priorityInput.max = "3"
+  if(isEditForm){
+    // priority group div has no gap in SCSS, so buttons do not overflow
+    priorityGroup.classList.add("priority-group") 
+  }
+  priorityBtn1.type = "button"
+  priorityBtn2.type = "button"
+  priorityBtn3.type = "button"
+  priorityBtn1.title = "low priority"
+  priorityBtn2.title = "medium priority"
+  priorityBtn3.title = "high priority"
+  priorityBtn1.classList.add("bg-success-subtle")
+  priorityBtn2.classList.add("bg-warning-subtle")
+  priorityBtn3.classList.add("bg-danger-subtle")
 
   submit.type = "submit"
   submitGroup.classList.add("submit-group")
+
+  cancel.type = "reset"
+
+  // priority number input
+  let priority = 1
+  priorityBtn1.addEventListener("click", () => {
+    priority = 1
+  })
+  priorityBtn2.addEventListener("click", () => {
+    priority = 2
+  })
+  priorityBtn3.addEventListener("click", () => {
+    priority = 3
+  })
 
   // simply close form on cancel
   cancel.addEventListener("click", () => {
@@ -98,7 +126,7 @@ function toDoForm(container: HTMLElement, position: DOMRect, formAction: FormAct
 
   // run necessary action when submitted
   form.addEventListener("submit", () => {
-    formAction(titleInput.value, detailsInput.value, dateInput.value, +priorityInput.value)
+    formAction(titleInput.value, detailsInput.value, dateInput.value, priority)
     container.removeChild(modal)
   })
 
@@ -113,7 +141,9 @@ function toDoForm(container: HTMLElement, position: DOMRect, formAction: FormAct
   dateGroup.appendChild(dateInput)
 
   priorityGroup.appendChild(priorityText)
-  priorityGroup.appendChild(priorityInput)
+  priorityGroup.appendChild(priorityBtn1)
+  priorityGroup.append(priorityBtn2)
+  priorityGroup.append(priorityBtn3)
 
   submitGroup.appendChild(submit)
   submitGroup.appendChild(cancel)
@@ -140,7 +170,7 @@ function toDoForm(container: HTMLElement, position: DOMRect, formAction: FormAct
   modal.style.right = '1.5rem'
   modal.classList.add("mt-0")
 
-  return { titleInput, detailsInput, dateInput, priorityInput, submit }
+  return { titleInput, detailsInput, dateInput, submit }
 }
 
 function addToDoForm(project: Project, container: HTMLElement, coordinates: DOMRect) {
@@ -156,14 +186,13 @@ function addToDoForm(project: Project, container: HTMLElement, coordinates: DOMR
 }
 
 function editToDoForm(toDo: ToDo, container: HTMLElement, coordinates: DOMRect) {
-  const elements = toDoForm(container, coordinates, editDetails)
+  const elements = toDoForm(container, coordinates, editDetails, true)
 
   // include the text of previous todo details
   if (elements) {
     elements.titleInput.value = toDo.title
     elements.detailsInput.value = toDo.description
     elements.dateInput.value = format(toDo.due, "yyyy-MM-dd")
-    elements.priorityInput.value = String(toDo.priorityNum)
     elements.submit.innerText = "Edit"
   }
 
