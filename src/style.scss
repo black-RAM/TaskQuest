@@ -170,3 +170,19 @@ section.game-page{
 button {
   @extend .btn;
 }
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(0, 0%, 95%);
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(0, 0%, 75%);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(0, 0%, 45%);
+}
