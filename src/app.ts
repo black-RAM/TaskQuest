@@ -37,7 +37,7 @@ class ToDo {
     this.description = newDetails
     this.due = newDate
     this.priorityNum = newPriority
-    pubSub.publish("todo-updated", [this, this.index])
+    pubSub.publish("todo-updated", this)
     pubSub.publish("data-change", projects)
   }
 
@@ -65,6 +65,7 @@ class Group {
 
 class Project extends Group {
   index: Number;
+  private count: number; // number of to-do being added to array (this.todos.length)
 
   constructor(
     public name: string,
@@ -75,25 +76,19 @@ class Project extends Group {
     projects.push(this);
     this.index = projects.indexOf(this);
     addProject(this)
-
-    if (this.initialTodos) {
-      this.initialTodos.forEach(todo => {
-        todo.parent = this.name;
-        pubSub.publish("todo-counted", [this.index, true])
-        pubSub.publish("data-change", projects)
-      })
-      pubSub.publish("todo-stored", this.initialTodos)
-    }
+    
+    this.count = -1
+    this.registerInitialToDos()
 
     // handle when todo needs to be deleted
     pubSub.subscribe(`deletion-in-${this.name}`, this.deleteToDo.bind(this))
   }
 
-  addToDo(todo: ToDo) {
-    todo.index = this.todos.length;
+  addToDo(todo: ToDo, moveOperation = false) {
+    todo.index = ++this.count;
     todo.parent = this.name;
     this.todos.push(todo);
-    pubSub.publish("todo-added", [todo, todo.index, true, true]);
+    pubSub.publish("todo-added", [todo, true, !moveOperation]);
 
     if (!this.initialTodos?.includes(todo)) {
       pubSub.publish("todo-stored", [todo])
@@ -103,7 +98,22 @@ class Project extends Group {
     pubSub.publish("data-change", projects)
   }
 
-  deleteToDo(todo: ToDo) {
+  receiveDrop(toDoData: string) {
+    const props: ToDo = JSON.parse(toDoData)
+    const parent = projects.find(project => project.name == props.parent)
+    if(parent) {
+      const movingToDo = parent.deleteToDoByName(props.title)
+      if(movingToDo) this.addToDo(movingToDo, true)
+    }
+  }
+
+  deleteToDoByName(title: string) {
+    const deletion = this.todos.find(todo => todo.title == title)
+    if(deletion) this.deleteToDo(deletion, true)
+    return deletion
+  }
+
+  deleteToDo(todo: ToDo, moveOperation = false) {
     const index = this.todos.indexOf(todo)
     const deletion = this.todos.splice(index, 1)[0]
     pubSub.publish("todo-counted", [this.index, false])
@@ -112,7 +122,7 @@ class Project extends Group {
     pubSub.publish("todo-deleted", todo.index)
 
     // award coins
-    if(deletion.checked) {
+    if(deletion.checked && !moveOperation) {
       const [reward, positive] = deletion.getWorth()
 
       if (positive) {
@@ -138,6 +148,17 @@ class Project extends Group {
     pubSub.publish("project-deleted", index)
     pubSub.publish("project-storage-deleted", deletion)
     pubSub.publish("data-change", projects)
+  }
+
+  private registerInitialToDos() {
+    if (this.initialTodos) {
+      this.initialTodos.forEach(todo => {
+        todo.parent = this.name;
+        pubSub.publish("todo-counted", [this.index, true])
+        pubSub.publish("data-change", projects)
+      })
+      pubSub.publish("todo-stored", this.initialTodos)
+    }
   }
 }
 

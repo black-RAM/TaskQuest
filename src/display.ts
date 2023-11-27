@@ -36,6 +36,23 @@ function addProject(project: Project | Category) {
   if (project instanceof Project) {
     listElement.dataset.index = String(project.index)
 
+    // move todo to this project when to-do dragged over
+    listElement.addEventListener("dragover", function (e) {
+      e.preventDefault()
+
+      if(e.dataTransfer) {
+        e.dataTransfer.dropEffect = "move"
+      }
+    })
+
+    listElement.addEventListener("drop", function(e) {
+      if(e.dataTransfer) {
+        const data = e.dataTransfer.getData("text/plain")
+        project.receiveDrop(data)
+      }
+    })
+
+    // delete project button
     const deleteButton = document.createElement("button")
     deleteButton.innerHTML = '<i class="bi bi-trash3 fs-5"></i>';
     deleteButton.title = "delete project";
@@ -99,33 +116,33 @@ function renderProject(project: Project | Category) {
     }
     delete project.initialTodos
   } else {
-    project.todos.forEach((todo, i) => {
-      renderToDo([todo, i, project instanceof Project, true]);
+    project.todos.forEach(todo => {
+      renderToDo([todo, project instanceof Project, true]);
     });
   }
 }
 
-function renderToDo(parameters: [toDo: ToDo, index: Number, isProject: Boolean, external: Boolean]) {
+function renderToDo(parameters: [toDo: ToDo, isProject: Boolean, external: Boolean]) {
   // spread parameters of tuple
-  const [toDo, index, isProject, externalCall] = parameters;
+  const [toDo, isProject, externalCall] = parameters,
 
   // HTML elements for to-do article
-  const element = document.createElement("article");
-  const leftDiv = document.createElement("div");
-  const rightDiv = document.createElement("div");
-  const checkBox = document.createElement("input");
-  const toDoTitle = document.createElement("label");
-  const dueDateT = document.createElement("time");
-  const detailsButton = document.createElement("button");
-  const editButton = document.createElement("button");
-  const deleteButton = document.createElement("button");
-  const detailsModal = document.createElement("dialog");
-  const closeDetailsModal = document.createElement("button");
+    element = document.createElement("article"),
+    leftDiv = document.createElement("div"),
+    rightDiv = document.createElement("div"),
+    checkBox = document.createElement("input"),
+    toDoTitle = document.createElement("label"),
+    dueDateT = document.createElement("time"),
+    detailsButton = document.createElement("button"),
+    editButton = document.createElement("button"),
+    deleteButton = document.createElement("button"),
+    detailsModal = document.createElement("dialog"),
+    closeDetailsModal = document.createElement("button");
 
   // attributes
   element.classList.add(`priority-${toDo.getPriorityWord()}`);
   checkBox.type = "checkbox";
-  checkBox.id = "completeCheck";
+  checkBox.classList.add("completeCheck");
   toDoTitle.htmlFor = "completeCheck";
 
   editButton.type = "button";
@@ -193,6 +210,20 @@ function renderToDo(parameters: [toDo: ToDo, index: Number, isProject: Boolean, 
       element.classList.remove("text-decoration-line-through")
     }
   })
+
+  // also check off if title clicked
+  toDoTitle.addEventListener("click", () => {
+    toDo.toggleCheck()
+
+    if (toDo.checked) {
+      element.classList.add("text-decoration-line-through")
+      checkBox.checked = true
+    } else {
+      element.classList.remove("text-decoration-line-through")
+      checkBox.checked = false
+    }
+  })
+  
   // finally, appending elements to the DOM
   detailsModal.appendChild(closeDetailsModal)
 
@@ -207,6 +238,27 @@ function renderToDo(parameters: [toDo: ToDo, index: Number, isProject: Boolean, 
     // hide date on small screens
     if (projectContainer.clientWidth < 400) {
       dueDateT.classList.add("d-none")
+
+    } else {
+      // to-dos are draggable on desktop
+      element.draggable = true
+
+      element.addEventListener("dragstart", function(e) {
+        const serialized = JSON.stringify(toDo)
+        if(e.dataTransfer) {
+          e.dataTransfer.setData("text/plain", serialized)
+          e.dataTransfer.effectAllowed = "move"
+        }
+      })
+
+      // tell user what just happened
+      element.addEventListener("dragend", function(e) {
+        if(e.dataTransfer?.dropEffect === "move") {
+          renderMessage("Yay! To-do moved!")
+        } else {
+          renderMessage("Move failed.")
+        }
+      })
     }
 
     // edit button
@@ -217,17 +269,11 @@ function renderToDo(parameters: [toDo: ToDo, index: Number, isProject: Boolean, 
     // delete button
     deleteButton.addEventListener("click", () => {
       pubSub.publish(`deletion-in-${toDo.parent}`, toDo)
-
-      // IMPORTANT INFORMATION:
-      // cannot call project.method directly
-      // because every todo would need a property refering to the parent project
-      // and JSON.stringify would fail to serialise that circular reference
-      // so it will crash app, and storage would be impossible
     })
 
     rightDiv.appendChild(editButton)
     rightDiv.appendChild(deleteButton)
-    element.dataset.index = String(index);
+    element.dataset.index = String(toDo.index);
   }
 
   element.appendChild(leftDiv);
@@ -240,11 +286,10 @@ function renderToDo(parameters: [toDo: ToDo, index: Number, isProject: Boolean, 
   }
 }
 
-function updateEditedToDo(parameters: [toDo: ToDo, index: number]) {
-  const index = parameters[1]
-  const newRender = renderToDo([...parameters, true, false])
-  const oldRender = document.querySelector(`article[data-index="${index}"]`)
-  const sister = document.querySelector(`article[data-index="${index + 1}"]`)
+function updateEditedToDo(toDo: ToDo) {
+  const newRender = renderToDo([toDo, true, false])
+  const oldRender = document.querySelector(`article[data-index="${toDo.index}"]`)
+  const sister = document.querySelector(`article[data-index="${toDo.index + 1}"]`)
 
   if (newRender && oldRender) {
     projectContainer.insertBefore(newRender, sister)

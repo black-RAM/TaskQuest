@@ -65,7 +65,7 @@ section.to-do-page {
       }
     }
 
-    input#completeCheck {
+    input.completeCheck {
       @extend .form-check-input;
     }
 
