@@ -9,12 +9,17 @@
     <title>TaskQuest</title>
   </head>
 
-  <body class="min-vh-100">
+  <body class="min-vh-100 overflow-hidden">
     <div class="container-fluid bg-dark pt-3 pb-3">
       <hgroup class="row text-light d-flex align-items-center display-4">
         <i class="bi bi-list col-2" id="menu-icon"></i>
         <h1 class="col-8 col-sm-10 offset-sm-1 text-center">TaskQuest</h1>
-        <i class="bi bi-controller col-1" title="games" id="game-icon"></i>
+        <i
+          class="bi bi-controller col-1"
+          style="cursor: pointer"
+          title="games"
+          id="game-icon"
+        ></i>
       </hgroup>
     </div>
 
@@ -28,7 +33,10 @@
           <h3 class="fs-2">Home</h3>
           <ul id="category-list" class="mb-5"></ul>
 
-          <h3 class="fs-2 d-flex justify-content-between pe-4">
+          <h3
+            class="fs-2 d-flex justify-content-between pe-4"
+            id="project-header"
+          >
             <span>Projects</span>
             <i class="bi bi-plus-square fs-3" id="add-project-icon"></i>
           </h3>
