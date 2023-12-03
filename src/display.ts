@@ -396,9 +396,7 @@ function renderGamePanel() {
   projectContainer.appendChild(cardContainer)
 }
 
-document.getElementById("game-icon")?.addEventListener("click", () => {
-  renderGamePanel()
-})
+document.getElementById("game-icon")?.addEventListener("click", renderGamePanel)
 
 function renderMessage(message: string, container = projectContainer) {
   const goodNews = message.startsWith("Yay!")
@@ -415,7 +413,10 @@ function renderMessage(message: string, container = projectContainer) {
   textBox.style.width = `calc(${container.clientWidth}px - 3rem)`
   container.appendChild(textBox)
   setTimeout(() => {
-    container.removeChild(textBox)
+    const pageNotChanged = [...container.childNodes].includes(textBox)
+    if(pageNotChanged) {
+      container.removeChild(textBox)
+    }
   }, 1500);
 }
 

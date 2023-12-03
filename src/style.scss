@@ -132,7 +132,8 @@ section.to-do-page {
 
 section.game-page{
   h1{
-    @extend .display-4, .text-center, .bg-dark, .text-light, .py-3, .mb-4;
+    @extend .display-4, .text-center, .text-light, .py-3, .mb-4;
+    background-color: $gray-800; // bootstrap SASS variable, lighter than .bg-dark
   }
 
   > .card-container{
@@ -145,7 +146,8 @@ section.game-page{
       max-width: 350px;
   
       img {
-        @extend .w-100, .object-fit-fill;
+        @extend .w-100, .object-fit-fill, .bg-secondary;
+        min-height: 300px;
       }
     }
   }

@@ -27,6 +27,7 @@ function addProjectForm() {
 
   // close modal if user clicks away
   document.body.addEventListener("click", function (event) {
+    event.preventDefault()
     if (modal instanceof HTMLDialogElement && event.target instanceof Node) {
       if (!(modal.contains(event.target) || icon?.contains(event.target))) {
         modal.close()
