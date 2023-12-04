@@ -15,8 +15,7 @@
         <i class="bi bi-list col-2" id="menu-icon"></i>
         <h1 class="col-8 col-sm-10 offset-sm-1 text-center">TaskQuest</h1>
         <i
-          class="bi bi-controller col-1"
-          style="cursor: pointer"
+          class="bi bi-controller col-1 pointer"
           title="games"
           id="game-icon"
         ></i>
@@ -26,10 +25,17 @@
     <div class="container-fluid">
       <main class="row">
         <nav
-          class="h-100 col-8 col-sm-5 col-lg-3 p-3 fs-4 lh-lg bg-white overflow-y-scroll"
-          style="z-index: 3"
+          class="h-100 col-8 col-sm-5 col-lg-3 p-3 fs-4 lh-lg bg-white overflow-y-scroll z-3 position-relative"
           id="menu"
         >
+          <button
+            type="button"
+            class="fs-2 bg-gradient bg-primary-subtle mt-3 ms-4 p-2 text-center rounded-5 z-2 position-absolute"
+            style="top: 0; right: 1rem; width: 2em"
+            title="create tour"
+          >
+            <i class="bi bi-mortarboard-fill"></i>
+          </button>
           <h3 class="fs-2">Home</h3>
           <ul id="category-list" class="mb-5"></ul>
 
@@ -44,8 +50,7 @@
 
           <dialog
             id="project-form-container"
-            class="position-absolute m-0 p-1 fs-5"
-            style="z-index: 1"
+            class="position-absolute m-0 p-1 fs-5 z-1"
           >
             <form
               id="add-project-form"

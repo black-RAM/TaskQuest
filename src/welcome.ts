@@ -27,6 +27,7 @@ function renderWalkthrough() {
 
       return icon?.classList.contains("d-none") ? menu : icon
     }, false, true)
+    const tourButton = stepElement(() => document.querySelector<HTMLButtonElement>("button[title='create tour']"))
     const category = stepElement(() => document.querySelectorAll<HTMLLIElement>("#category-list > li")[1])
     const projectHeader = stepElement(() => document.getElementById("project-header"))
     const projectLink = stepElement(() => {
@@ -47,7 +48,7 @@ function renderWalkthrough() {
     
     const gameImg = stepElement(() => document.getElementsByTagName("img")[0])
 
-    return { banner, toDoArticle, toDoArticle1, toDoArticle2, menu, category, projectHeader, projectLink, addToDoIcon, gameIcon, gameImg }
+    return { banner, toDoArticle, toDoArticle1, toDoArticle2, menu, tourButton, category, projectHeader, projectLink, addToDoIcon, gameIcon, gameImg }
   })()
 
   const stages: (() => Promise<IntroJs>)[] = [
@@ -56,10 +57,6 @@ function renderWalkthrough() {
         {
           title: "TaskQuest Ahoy!",
           intro: "It's fun. It's simple. Meet the only to-do app you'll ever need!",
-        },
-        {
-          title: "By-the-way",
-          intro: "You can download this as an app with offline access. <i>Just look in the searchbar.</i> Anyway, let's begin!"
         },
         {
           element: e.banner.get(),
@@ -75,7 +72,12 @@ function renderWalkthrough() {
         {
           element: e.menu.get(),
           title: "The menu",
-          intro: e.menu.get()?.classList.contains("bi-list") ? "Click the icon to discover even more!" : "Check out the different app pages! Please click <b> 'Important' to continue.",
+          intro: e.menu.get()?.classList.contains("bi-list") ? "Click the icon to discover even more!" : "This is just the place to navigate the different app pages!",
+        },
+        {
+          element: e.tourButton.get(),
+          title: "A Quick Reminder",
+          intro: "By default, this tour will not show on your second visit. Ever need it again? Just tap this button."
         },
         {
           element: e.category.get(),
@@ -145,7 +147,11 @@ function renderWalkthrough() {
           title: "Game time.",
           intro: "Click the game icon to play! Enjoy the game, and the productivity gains!",
           position: "right"
-        }
+        },
+        {
+          title: "By-the-way",
+          intro: "You can download this as an app with offline access. <i>Just look in the searchbar.</i>"
+        },
       ],
       showBullets: false,
       showStepNumbers: true,
@@ -182,4 +188,13 @@ function renderWalkthrough() {
   }
 }
 
-setTimeout(renderWalkthrough, 1500);
+// attach this function to tour button
+document.querySelector('button[title="create tour"]')?.addEventListener("click", function(event) {
+  event.stopImmediatePropagation() // prevent menu from skipping step
+  if(!document.querySelector("i.bi-list")?.classList.contains("d-none")) { // as in mobile screen
+    document.getElementsByTagName("nav")[0].classList.add("d-none") // hide menu when clicked
+  }
+  renderWalkthrough()
+})
+
+export { renderWalkthrough }

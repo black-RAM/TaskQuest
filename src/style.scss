@@ -1,7 +1,30 @@
+// essential imports
 @import "bootstrap/scss/bootstrap";
 @import "bootstrap-icons/font/bootstrap-icons.css";
 @import "intro.js/introjs.css";
 
+// Bootstrap SASS utilities API
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/utilities";
+
+// because bootstrap lacks a z-index utility
+$utilities: map-merge(
+  $utilities, 
+  (
+    "z-index": (
+      property: z-index,
+      class: z
+    )
+  )
+);
+
+// bootstrap also lacks a cursor-pointer class
+.pointer {
+  cursor: pointer;
+}
+
+// style content inserted by JS, using built-in bootstrap utilities
 nav ul {
   @extend .list-group, .list-group-flush;
 

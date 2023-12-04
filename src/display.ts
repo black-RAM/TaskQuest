@@ -5,7 +5,6 @@ import { pubSub } from "./pubsub";
 import { format } from 'date-fns';
 import "./style.scss";
 import "./resizer.js";
-import "./welcome.ts";
 
 const projectContainer = document.createElement("section");
 projectContainer.classList.add("to-do-page");

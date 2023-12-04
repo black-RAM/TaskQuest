@@ -1,5 +1,6 @@
 import { hasVisited, populateInitialProjects, loadData, setVisitedFlag } from "./storage"
 import { filterImportant, filterThisWeek, filterToday, noFilter } from "./filters";
+import { renderWalkthrough } from "./welcome";
 import { addProject } from "./display";
 import { Game, bank } from "./games";
 import { pubSub } from "./pubsub";
@@ -208,6 +209,7 @@ new Game("Chrome Dino", "./thumbnails/chrome-dino.jpeg", "https://chromedino.com
 // storage-related function calls
 if (!hasVisited()) {
   populateInitialProjects()
+  setTimeout(renderWalkthrough, 1500); // give tour
   setVisitedFlag()
 } else {
   projects = loadData()
