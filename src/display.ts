@@ -11,16 +11,13 @@ const projectContainer = document.createElement("section");
 projectContainer.classList.add("to-do-page");
 
 function showAllTasks() {
-  clearPage()
   renderProject(allTasksCategory)
 }
 
 function addProject(project: Project | Category) {
   // show all tasks on startup
   if (project.name === "All Tasks") {
-    setTimeout(() => {
-      showAllTasks()
-    }, 10); // 10ms delay to allow all to-dos to initialise
+    setTimeout(showAllTasks, 10); // 10ms delay to allow all to-dos to initialise
   };
 
   const type = project instanceof Project ? "project" : "category";
@@ -58,7 +55,7 @@ function addProject(project: Project | Category) {
     deleteButton.innerHTML = '<i class="bi bi-trash3 fs-5"></i>';
     deleteButton.title = "delete project";
     deleteButton.addEventListener("click", () => {
-      project.delete()
+      project.deleteSelf()
       showAllTasks()
     });
     listElement.appendChild(deleteButton);
@@ -115,7 +112,7 @@ function renderProject(project: Project | Category) {
     for (const todo of project.initialTodos) {
       project.addToDo(todo)
     }
-    delete project.initialTodos
+    project.deleteInitialToDos()
   } else {
     project.todos.forEach(todo => {
       renderToDo([todo, project instanceof Project, true]);

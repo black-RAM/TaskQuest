@@ -142,11 +142,16 @@ class Project extends Group {
     }
   }
 
-  delete() {
+  deleteSelf() {
     const index = projects.indexOf(this);
     const deletion = projects.splice(index, 1)[0];
     pubSub.publish("project-deleted", index)
     pubSub.publish("project-storage-deleted", deletion)
+    pubSub.publish("data-change", projects)
+  }
+
+  deleteInitialToDos() {
+    this.initialTodos = undefined
     pubSub.publish("data-change", projects)
   }
 
@@ -155,9 +160,9 @@ class Project extends Group {
       this.initialTodos.forEach(todo => {
         todo.parent = this.name;
         pubSub.publish("todo-counted", [this.index, true])
-        pubSub.publish("data-change", projects)
       })
       pubSub.publish("todo-stored", this.initialTodos)
+      pubSub.publish("data-change", projects)
     }
   }
 }
