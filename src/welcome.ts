@@ -29,7 +29,18 @@ function renderWalkthrough() {
     }, false, true)
     const category = stepElement(() => document.querySelectorAll<HTMLLIElement>("#category-list > li")[1])
     const projectHeader = stepElement(() => document.getElementById("project-header"))
-    const projectLink = stepElement(() => document.querySelectorAll<HTMLElement>("#project-list > li > p")[0], true)
+    const projectLink = stepElement(() => {
+      const link = document.querySelectorAll<HTMLElement>("#project-list > li > p")[0]
+
+      if(menu.get()?.classList.contains("bi-list")) { // as in a mobile screen
+        const sidebar = document.getElementsByTagName("nav")[0]
+        sidebar.addEventListener("click", () => {
+          sidebar.classList.add("d-none")
+        })
+      }
+      
+      return link
+    }, true)
 
     const addToDoIcon = stepElement(() => document.querySelector<HTMLElement>("i.bi-journal-plus"))
     const gameIcon = stepElement(() => document.getElementById("game-icon"), true)
@@ -64,7 +75,7 @@ function renderWalkthrough() {
         {
           element: e.menu.get(),
           title: "The menu",
-          intro: "Discover even more here! Please click <b>'Important'</b> to proceed.",
+          intro: e.menu.get()?.classList.contains("bi-list") ? "Click the icon to discover even more!" : "Check out the different app pages! Please click <b> 'Important' to continue.",
         },
         {
           element: e.category.get(),
@@ -78,6 +89,7 @@ function renderWalkthrough() {
         },
         {
           element: e.projectLink.get(),
+          title: "A Perfect Example",
           intro: "Look into this project I made just for you! <small>(Select done and then you can open the page.)</small>"
         }
       ],

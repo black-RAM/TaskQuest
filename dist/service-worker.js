@@ -85,7 +85,7 @@ define(['./workbox-36f3be71'], (function (workbox) { 'use strict';
     "revision": null
   }, {
     "url": "main.js",
-    "revision": "c7963ba1e32d2ff1354cd6cbbf1a3314"
+    "revision": "bfac543ebe17f551ec8f9edbeb911db8"
   }], {});
   workbox.registerRoute(/\.(?:html)$/, new workbox.StaleWhileRevalidate(), 'GET');
 
