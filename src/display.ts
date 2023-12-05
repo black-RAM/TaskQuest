@@ -413,7 +413,7 @@ function renderMessage(message: string, container = projectContainer) {
     if(pageNotChanged) {
       container.removeChild(textBox)
     }
-  }, 1500);
+  }, 3000);
 }
 
 pubSub.subscribe("todo-added", renderToDo);
