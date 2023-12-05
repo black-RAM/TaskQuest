@@ -14,10 +14,17 @@ function addProjectForm() {
       const iconTop = icon.parentElement?.getBoundingClientRect().top;
 
       // Set the position of the dialog
-      if (iconTop) modal.style.top = `${iconTop - 20}px`;
-      modal.style.left = `${navBar?.clientWidth - 35}px`;
-
-      modal.show();
+      if (iconTop) {
+        if(window.innerWidth > 500) {
+          modal.style.top = `${iconTop - 20}px`;
+          modal.style.left = `${navBar?.clientWidth - 35}px`
+          modal.show()
+        } else {
+          modal.style.top = `${iconTop - 80}px`
+          modal.style.left = "1rem"
+          modal.showModal()
+        };
+      }
     }
   })
 
