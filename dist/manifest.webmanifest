@@ -5,11 +5,11 @@
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#000000",
+  "theme_color": "#212529",
   "icons": [
     {
       "src": "https://black-ram.github.io/TaskQuest/icon.png",
-      "sizes": "192x192",
+      "sizes": "512x512",
       "type": "image/png"
     }
   ]
