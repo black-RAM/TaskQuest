@@ -1,55 +1,53 @@
 import introJs from "intro.js";
 import { IntroJs } from "intro.js/src/intro";
 
-function renderWalkthrough() {
-  interface elementDictionary {
-    [name: string]: {
-      get: () => HTMLElement | null,
-      stagehand: boolean,
-      changer: boolean
-    }
+interface elementDictionary {
+  [name: string]: {
+    get: () => HTMLElement | null,
+    stagehand: boolean,
+    changer: boolean,
+    isVisible: () => boolean
+  }
+}
+
+const e: elementDictionary = (() => {
+  const stepElement = (get: () => HTMLElement | null, stagehand = false, changer = false) => {
+    const isVisible = () => !get()?.classList.contains("d-none")
+    return {get, stagehand, changer, isVisible}
   }
 
-  const e: elementDictionary = (() => {
-    const stepElement = (get: () => HTMLElement | null, stagehand = false, changer = false) => {
-      return {get, stagehand, changer}
+  const banner = stepElement(() => document.getElementsByTagName("h2")[0])
+  
+  const toDoArticle = stepElement(() => document.getElementsByTagName("article")[1], false, true)
+  const toDoArticle1 = stepElement(() => document.getElementsByTagName("article")[0], false, true)
+  const toDoArticle2 = stepElement(() => document.getElementsByTagName("article")[2], false, true)
+
+  const menuIcon = stepElement(() => document.querySelector<HTMLElement>("i.bi-list"), false, true)
+  const navBar = stepElement(() => document.getElementsByTagName("nav")[0])
+  const tourButton = stepElement(() => document.querySelector<HTMLButtonElement>("button[title='create tour']"))
+  const category = stepElement(() => document.querySelectorAll<HTMLLIElement>("#category-list > li")[1])
+  const projectHeader = stepElement(() => document.getElementById("project-header"))
+  const projectLink = stepElement(() => {
+    const link = document.querySelectorAll<HTMLElement>("#project-list > li > p")[0]
+
+    if(menuIcon.isVisible() && navBar.isVisible()) {
+      navBar.get()?.addEventListener("click", () => {
+        navBar.get()?.classList.add("d-none")
+      })
     }
-
-    const banner = stepElement(() => document.getElementsByTagName("h2")[0])
     
-    const toDoArticle = stepElement(() => document.getElementsByTagName("article")[1], false, true)
-    const toDoArticle1 = stepElement(() => document.getElementsByTagName("article")[0], false, true)
-    const toDoArticle2 = stepElement(() => document.getElementsByTagName("article")[2], false, true)
+    return link
+  }, true)
 
-    const menu = stepElement(() => {
-      const icon = document.querySelector<HTMLElement>("i.bi-list")
-      const menu = document.getElementsByTagName("nav")[0]
+  const addToDoIcon = stepElement(() => document.querySelector<HTMLElement>("i.bi-journal-plus"))
+  const gameIcon = stepElement(() => document.getElementById("game-icon"), true)
+  
+  const gameImg = stepElement(() => document.getElementsByTagName("img")[0])
 
-      return icon?.classList.contains("d-none") ? menu : icon
-    }, false, true)
-    const tourButton = stepElement(() => document.querySelector<HTMLButtonElement>("button[title='create tour']"))
-    const category = stepElement(() => document.querySelectorAll<HTMLLIElement>("#category-list > li")[1])
-    const projectHeader = stepElement(() => document.getElementById("project-header"))
-    const projectLink = stepElement(() => {
-      const link = document.querySelectorAll<HTMLElement>("#project-list > li > p")[0]
+  return { banner, toDoArticle, toDoArticle1, toDoArticle2, menuIcon, navBar, tourButton, category, projectHeader, projectLink, addToDoIcon, gameIcon, gameImg }
+})()
 
-      if(menu.get()?.classList.contains("bi-list")) { // as in a mobile screen
-        const sidebar = document.getElementsByTagName("nav")[0]
-        sidebar.addEventListener("click", () => {
-          sidebar.classList.add("d-none")
-        })
-      }
-      
-      return link
-    }, true)
-
-    const addToDoIcon = stepElement(() => document.querySelector<HTMLElement>("i.bi-journal-plus"))
-    const gameIcon = stepElement(() => document.getElementById("game-icon"), true)
-    
-    const gameImg = stepElement(() => document.getElementsByTagName("img")[0])
-
-    return { banner, toDoArticle, toDoArticle1, toDoArticle2, menu, tourButton, category, projectHeader, projectLink, addToDoIcon, gameIcon, gameImg }
-  })()
+function renderWalkthrough() {
 
   const stages: (() => Promise<IntroJs>)[] = [
     () => introJs().setOptions({
@@ -70,9 +68,9 @@ function renderWalkthrough() {
           intro: "Get a glance of the title and details. Tap the title to tick it off!"
         },
         {
-          element: e.menu.get(),
+          element: e.menuIcon.isVisible() ? e.menuIcon.get() : e.navBar.get(),
           title: "The menu",
-          intro: e.menu.get()?.classList.contains("bi-list") ? "Click the icon to discover even more!" : "This is just the place to navigate the different app pages!",
+          intro: e.menuIcon.isVisible() ? "Click the icon to discover even more!" : "This is just the place to navigate the different app pages!",
         },
         {
           element: e.tourButton.get(),
@@ -189,11 +187,12 @@ function renderWalkthrough() {
 }
 
 // attach this function to tour button
-document.querySelector('button[title="create tour"]')?.addEventListener("click", function(event) {
-  event.stopImmediatePropagation() // prevent menu from skipping step
-  if(!document.querySelector("i.bi-list")?.classList.contains("d-none")) { // as in mobile screen
-    document.getElementsByTagName("nav")[0].classList.add("d-none") // hide menu when clicked
+document.querySelector('button[title="create tour"]')?.addEventListener("click", () => {
+
+  if(e.menuIcon.isVisible() && e.navBar.isVisible()) { // as in mobile screen
+    e.navBar.get()?.classList.add("d-none") // hide menu when clicked
   }
+  
   renderWalkthrough()
 })
 
