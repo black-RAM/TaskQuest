@@ -18,3 +18,8 @@
 - But if you complete a to-do after the due date, you lose the coins you could have gained.
 - At the game panel (which you can navigate to by clicking the game controller icon at the top right of the page), you can use the coins you have earned to pay for a ten-minute gaming session in any of the three games.
 - Coins are also stored in local storage for continuity.
+
+# Latest Major Updates
+
+- On desktop, drag a to-do and drop it on a project link to move it.
+- There is a product walkthrough to guide the user with the onboarding experience (using the intro.js library).
