@@ -47,7 +47,7 @@ const e: elementDictionary = (() => {
   return { banner, toDoArticle, toDoArticle1, toDoArticle2, menuIcon, navBar, tourButton, category, projectHeader, projectLink, addToDoIcon, gameIcon, gameImg }
 })()
 
-function renderWalkthrough() {
+async function renderWalkthrough() {
 
   const stages: (() => Promise<IntroJs>)[] = [
     () => introJs().setOptions({
@@ -163,25 +163,19 @@ function renderWalkthrough() {
 
   // set up stage-changers
   for (const name in e) {
+    const tour = await currentStage
     const element = e[name]
     const DOMElement = element.get()
+    let action: (() => void) | null = null;
+    
+    if(element.stagehand) {
+      action = () => {currentStage = stages[++stageIndex]()}
+    } else if (element.changer) {
+      action = () => {setTimeout(() => {tour.nextStep()}, 500);}
+    }
 
-    if(DOMElement) {
-      if(element.stagehand) {
-        DOMElement.addEventListener("click", () => {
-          currentStage = stages[++stageIndex]()
-        })
-      }
-      
-      else if (element.changer) {
-        DOMElement.addEventListener("click", () => {
-          currentStage.then(tour => {
-            if(tour.isActive()) {
-              setTimeout(() => {tour.nextStep()}, 500); // immediate change is jarring
-            }
-          })
-        }, {once: true})
-      }
+    if(DOMElement && tour.isActive() && action) {
+      DOMElement.addEventListener("click", action, {once: true})
     }
   }
 }
