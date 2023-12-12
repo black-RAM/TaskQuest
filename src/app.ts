@@ -182,16 +182,34 @@ class Category extends Group {
     pubSub.subscribe("project-storage-deleted", this.removeProject.bind(this))
   }
 
-  updateCategory(newToDos: ToDo[]) {
-    this.todos = this.filterFunction([...this.todos, ...newToDos]);
+  private updateCategory(newToDos: ToDo[]) {
+    this.todos = this.filterFunction([...this.todos, ...newToDos])
+    this.sort()
   }
 
-  removeFromCategory(deletion: ToDo) {
+  private removeFromCategory(deletion: ToDo) {
     this.todos = this.todos.filter(todo => todo !== deletion)
+    this.sort()
   }
 
-  removeProject(deletion: Project) {
+  private removeProject(deletion: Project) {
     this.todos = this.todos.filter(todo => todo.parent !== deletion.name)
+    this.sort()
+  }
+
+  private sort() {
+    this.todos = this.todos.sort((a, b) => {
+      // Sort by priority (high to low)
+      if (a.priorityNum !== b.priorityNum) {
+        return b.priorityNum - a.priorityNum;
+      }
+
+      // If priorities are the same, sort by due date (earliest to latest)
+      const dueDateA = new Date(a.due).getTime();
+      const dueDateB = new Date(b.due).getTime();
+
+      return dueDateA - dueDateB;
+    });
   }
 }
 
@@ -209,7 +227,7 @@ new Game("Chrome Dino", "./thumbnails/chrome-dino.jpeg", "https://chromedino.com
 // storage-related function calls
 if (!hasVisited()) {
   populateInitialProjects()
-  setTimeout(renderWalkthrough, 1500); // give tour
+  setTimeout(renderWalkthrough, 1500)
   setVisitedFlag()
 } else {
   projects = loadData()

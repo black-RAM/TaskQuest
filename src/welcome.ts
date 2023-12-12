@@ -59,13 +59,13 @@ async function renderWalkthrough() {
         {
           element: e.banner.get(),
           title: "Define: category",
-          intro: "This is a group which filters to-dos. Since this one is <b>'All Tasks'</b> it includes everything.",
+          intro: "This is a group which filters to-dos and sorts them by priority and due date. <b>'All Tasks'</b> includes everything.",
           position: "right"
         },
         {
           element: e.toDoArticle.get(),
           title: "A To-Do Element",
-          intro: "Get a glance of the title and details. Tap the title to tick it off!"
+          intro: "Get a glance of the title and details. Click the checkbox to tick it off!"
         },
         {
           element: e.menuIcon.isVisible() ? e.menuIcon.get() : e.navBar.get(),
@@ -85,7 +85,7 @@ async function renderWalkthrough() {
         {
           element: e.projectHeader.get(),
           title: "About Projects",
-          intro: "These are the groups of to-dos that you make. Later, you could click the plus icon to add your own!"
+          intro: "These are the groups of to-dos that you make. After you close the tour, you can click the plus icon to add your own!"
         },
         {
           element: e.projectLink.get(),
@@ -143,12 +143,12 @@ async function renderWalkthrough() {
         {
           element: e.gameImg.get(),
           title: "Game time.",
-          intro: "Click the game icon to play! Enjoy the game, and the productivity gains!",
+          intro: "Click the game's thumbnail to play. When you do, the amount of coins specified on the card will be deducted.",
           position: "right"
         },
         {
           title: "By-the-way",
-          intro: "You can download this as an app with offline access. <i>Just look in the searchbar.</i>"
+          intro: "You can download this as an app with offline access. Enjoy the productivity gains!"
         },
       ],
       showBullets: false,
